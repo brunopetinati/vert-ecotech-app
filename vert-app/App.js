@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ThemeProvider, createTheme } from '@rneui/themed'
+import { NavigationContainer } from '@react-navigation/native'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import Login from './screens/Login';
+import CarbonCreditProjects from './screens/CarbonCreditProjects';
+import Register from './screens/Register';
+
+const theme = createTheme({
+  lightColors: {
+    primary: '#93bf85',
+    secondary: '#93bf85',
+    background: '#93bf85'
+  },
+  darkColors: {
+    primary: '#93bf85',
+  },
+  mode: 'light',
+})
+
+const Stack = createNativeStackNavigator()
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+    <ThemeProvider theme={theme}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ThemeProvider>
+  )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
