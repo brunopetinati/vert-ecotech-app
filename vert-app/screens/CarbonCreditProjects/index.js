@@ -2,7 +2,6 @@ import { StyleSheet, SafeAreaView, Text, FlatList, View } from "react-native"
 import { ListItem } from '@rneui/themed';
 import { useState } from "react";
 import { Height, Width } from "../../constants/dimensions";
-import BottomTabs from '../../components/BottomTabs';
 
 export default function CarbonCreditProjects({ navigation }) {
 
@@ -32,7 +31,6 @@ export default function CarbonCreditProjects({ navigation }) {
             />
           </View>
         </SafeAreaView>
-        <BottomTabs />
       </>
     )
 }

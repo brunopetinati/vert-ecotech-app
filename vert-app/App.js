@@ -1,9 +1,10 @@
 import { ThemeProvider, createTheme } from '@rneui/themed'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import Login from './screens/Login';
-import CarbonCreditProjects from './screens/CarbonCreditProjects';
-import Register from './screens/Register';
+import Login from './screens/Login'
+import CarbonCreditProjects from './screens/CarbonCreditProjects'
+import Register from './screens/Register'
+import Main from './screens/Main'
 
 const theme = createTheme({
   lightColors: {
@@ -27,6 +28,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
+          <Stack.Screen name="Main" component={Main}/>
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

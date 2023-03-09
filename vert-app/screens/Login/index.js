@@ -1,12 +1,12 @@
-import { StyleSheet, SafeAreaView, View } from "react-native";
-import { Button, Input, Text } from '@rneui/themed';
-import { Height, Width } from "../../constants/dimensions";
-import { Ionicons } from '@expo/vector-icons';
+import { StyleSheet, SafeAreaView, View } from "react-native"
+import { Button, Input, Text } from '@rneui/themed'
+import { Height, Width } from "../../constants/dimensions"
+import { Ionicons } from '@expo/vector-icons'
 
 export default function Login({navigation}) {
 
     function handleLogin(email, password) {
-      navigation.navigate('CarbonCreditProjects')
+      navigation.navigate('Main')
     }
 
     return(
