@@ -5,6 +5,7 @@ import Login from './screens/Login'
 import CarbonCreditProjects from './screens/CarbonCreditProjects'
 import Register from './screens/Register'
 import Main from './screens/Main'
+import AddPropertie from './screens/AddPropertie'
 
 const theme = createTheme({
   lightColors: {
@@ -29,6 +30,7 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
           <Stack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
           <Stack.Screen name="Main" component={Main}/>
+          <Stack.Screen name="AddPropertie" component={AddPropertie}/>
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

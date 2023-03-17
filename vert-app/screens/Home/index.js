@@ -7,7 +7,7 @@ import WelcomeHeader from "../../components/WelcomeHeader"
 import { Ionicons } from '@expo/vector-icons';
 import { Height, Width } from "../../constants/dimensions"
 
-export default function Home() {
+export default function Home({navigation}) {
     const [ propertiesList, setPropertiesList ] = useState([
         {
             id: 0,
@@ -66,8 +66,9 @@ export default function Home() {
     }, [])
 
     function startToAddPropertie() {
-        console.log('Adicone uma nova propriedade')
+        navigation.navigate('AddPropertie')
     }
+
     function renderItem(propertie) {
         return(
             <ListItem>
