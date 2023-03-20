@@ -10,7 +10,7 @@ export default function SecondScreen({navigation}) {
         <SafeAreaView style={styles.container}>
             <Input leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />} placeholder="CNPJ do proprietário"/>
             <SelectDropdown
-                dropdownStyle={{ width: '100%', }}
+                dropdownStyle={{ ...styles.dropdown }}
                 data={countries}
                 onSelect={(selectedItem, index) => {
                     console.log(selectedItem, index)
@@ -44,5 +44,10 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 32,
+    },
+    dropdown: {
+        width: '80%',
+        
+
     },
 })
