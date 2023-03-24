@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { useState } from "react"
 import FirstScreen from './FirstScreen'
 import SecondScreen from './SecondScreen'
 import ThirdScreen from './ThirdScreen'
@@ -19,6 +20,8 @@ export default function AddPropertie() {
           restSpeedThreshold: 0.01,
         }
     }
+
+    const [projectInfo, setProjectInfo] = useState()
 
     return(
         <NavigationContainer independent={true}>

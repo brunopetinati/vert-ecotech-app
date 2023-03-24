@@ -1,16 +1,67 @@
 import { Button, Input } from "@rneui/themed";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
+import MaskInput, { Masks } from 'react-native-mask-input';
+import React, { useState } from "react";
+import VertMaskInput from "../../components/VertMaskInput";
 
 export default function FirstScreen({navigation}) {
+
+    const [name, setName] = useState('')
+    const [email, setEmail] = useState('')
+    const [whatsapp, setWhatsapp] = useState('')
+    const [totalArea, setTotalArea] = useState('')
+    const [totalLegalArea, setTotalLegalArea] = useState('')
+    const [propertieAddress, setPropertieAddress] = useState('')
+
     return(
         <SafeAreaView style={styles.container}>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />} placeholder="Nome do proprietário da área"/>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="logo-whatsapp" />} placeholder="Whatsappp do proprietário"/>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="mail-outline" />} placeholder="Email do proprietário"/>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />} placeholder="Área total da propriedade (ha)?"/>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="expand-outline" />} placeholder="Área total da reserva legal (ha)?"/>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="map-outline" />} placeholder="Endereço da propriedade?"/>
+            <VertMaskInput 
+                label="Nome do proprietário"
+                value={name}
+                maxLength={100}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />}
+                setValue={setName}
+            />
+            <VertMaskInput 
+                label="Whatsapp"
+                keyboardType="numeric"
+                value={whatsapp}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="logo-whatsapp" />}
+                setValue={setWhatsapp}
+                mask={Masks.BRL_PHONE}
+            />
+            <VertMaskInput 
+                label="Email do proprietário"
+                keyboardType="email-address"
+                value={email}
+                maxLength={20}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="mail-outline" />}
+                setValue={setEmail}
+            />
+            <VertMaskInput 
+                label="Área total da propriedade (ha)"
+                keyboardType="numeric"
+                value={totalArea}
+                maxLength={20}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />}
+                setValue={setTotalArea}
+            />
+            <VertMaskInput 
+                label="Área total da reserva legal (ha)"
+                keyboardType="numeric"
+                value={totalLegalArea}
+                maxLength={20}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="expand-outline" />}
+                setValue={setTotalLegalArea}
+            />
+            <VertMaskInput 
+                label="Endereço da propriedade"
+                value={propertieAddress}
+                maxLength={120}
+                leftIcon={<Ionicons color='#93bf85' size={20} name="map-outline" />}
+                setValue={setPropertieAddress}
+            />
 
             <Button onPress={() => navigation.navigate('Second')} containerStyle={{ marginVertical: 16 }} title='Continuar' />
             <Button type="clear" title='Continuar mais tarde' />
