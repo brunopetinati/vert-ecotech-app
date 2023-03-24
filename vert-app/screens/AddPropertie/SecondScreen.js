@@ -15,7 +15,7 @@ export default function SecondScreen({navigation}) {
     
     return(
         <KeyboardAvoidingView style={styles.container}>
-            <ScrollView contentContainerStyle={{ marginTop: 32, }}>
+            <ScrollView contentContainerStyle={{ marginTop: 64, borderWidth: 1}}>
                 <VertMaskInput 
                     label="CNPJ do proprietário"
                     value={cpnj}
@@ -209,7 +209,7 @@ export default function SecondScreen({navigation}) {
                     />
                 </View>
             </ScrollView>
-            <View style={{ position: 'absolute', left: 8, bottom: 8, width: '100%', margin: 'auto' }}>
+            <View>
                 <Button onPress={() => navigation.navigate('Third')} containerStyle={{ marginVertical: 8 }} title='Continuar' />
                 <Button type="clear" title='Continuar mais tarde' />
             </View>
@@ -224,5 +224,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 32,
     },
-    
+
 })
