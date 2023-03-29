@@ -1,23 +1,80 @@
 import { StyleSheet, SafeAreaView, View } from "react-native"
 import { Button, Input, Text } from '@rneui/themed'
-import { Height, Width } from "../../constants/dimensions"
+import { Width } from "../../constants/dimensions"
 import { Ionicons } from '@expo/vector-icons'
 import api from '../../Api'
+import { useState } from 'react';
 
 export default function Login({navigation}) {
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [emailError, setEmailError] = useState("")
+  const [passwordError, setPasswordError] = useState("")
+  const [isPasswordVisible, setPasswordVisibility] = useState(true)
 
-    async function tryLogin() {}
-    function handleLogin(email, password) {
-      tryLogin()
+  function cleanLoginData() {
+    setTimeout(() => {
+      setEmailError("")
+      setPasswordError("") 
+    }, 5000)
+  }
+
+  async function tryLogin() {
+    await api.post('/login/', {
+      email: email,
+      password: password
+    }).then((response) => {
+      console.log(response.data)
       navigation.navigate('Main')
+    }).catch((error) => {
+      console.log(error)
+      setEmailError("Revise o endereço de email informado")
+      setPasswordError("Revise a senha informada")
+    })
+    cleanLoginData()
+  }
+
+  function handleLogin() {
+    if (email.length > 6 && password.length > 6) {
+      tryLogin() 
+    } 
+    if (email.length <= 6) {
+      setEmailError("Email menor que 6 caracteres")
+      cleanLoginData()
     }
+    if (password.length <= 6) {
+      setPasswordError("Senha menor que 6 caracteres")
+      cleanLoginData()
+    }
+  }
 
     return(
         <SafeAreaView style={styles.loginBox}>
           <View style={styles.loginArea}>
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />} placeholder="email" />
-            <Input leftIcon={<Ionicons color='#93bf85' size={20} name="key-outline" />} rightIcon={<Ionicons color='#93bf85' size={20} name="eye-outline" />} secureTextEntry={true}  placeholder="senha" />
+            <Input 
+              value={email} 
+              onChangeText={setEmail} 
+              errorMessage={emailError} 
+              leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />} 
+              placeholder="email" 
+            />
+            <Input 
+              value={password} 
+              onChangeText={setPassword} 
+              errorMessage={passwordError} 
+              leftIcon={<Ionicons color='#93bf85' size={20} name="key-outline" />} 
+              rightIcon={<Ionicons onPress={() => { 
+                if (isPasswordVisible) {
+                  setPasswordVisibility(false)
+                } else {
+                  setPasswordVisibility(true)
+                }
+              }} color='#93bf85' size={20} name="eye-outline" />} 
+              secureTextEntry={isPasswordVisible}  placeholder="senha" 
+            />
+
             <Text>Esqueceu sua senha?</Text>
+
             <Button containerStyle={{marginVertical: 16}} onPress={handleLogin}>Login</Button>
             <Button type='outline' onPress={() => navigation.navigate('Register')}>Cadastrar</Button>
           </View>

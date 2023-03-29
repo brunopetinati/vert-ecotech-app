@@ -1,10 +1,24 @@
-import { SafeAreaView, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native";
 
 export default function ThirdScreen() {
-    return(
-        <SafeAreaView style={styles.container}>
 
-        </SafeAreaView>
+    async function finishProjectRegister() {
+        
+    }
+
+    return(
+        <KeyboardAvoidingView style={styles.container}>
+            {/* Input Fields */}
+            <ScrollView  contentContainerStyle={{ marginTop: 64, borderWidth: 1}}>
+                
+            </ScrollView>
+
+            {/* Button Area */}
+            <View>
+                <Button onPress={finishProjectRegister} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
+                <Button type="clear" title='Continuar mais tarde' />
+            </View>
+        </KeyboardAvoidingView>
     )
 }
 
