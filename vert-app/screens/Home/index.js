@@ -1,68 +1,91 @@
-import { Dialog, FAB } from "@rneui/themed"
-import { useState, useEffect } from "react"
+import { FAB } from "@rneui/themed"
+import { useState, useEffect, useContext } from "react"
 import { FlatList, StyleSheet, Text, View, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
 import { Ionicons } from '@expo/vector-icons';
 import { Height, Width } from "../../constants/dimensions"
+import api from '../../Api'
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import { getData } from "../../Storage"
 
 export default function Home({navigation}) {
-    const [ propertiesList, setPropertiesList ] = useState([
-        {
-            id: 0,
-            title: 'Fazenda de marn',
-            subtitle: 'R$ 45.000,00'
-        },
-        {
-            id: 1,
-            title: 'Fazenda de itatiba',
-            subtitle: 'R$ 25.000,00'
-        },
-        {
-            id: 2,
-            title: 'Fazenda do pai',
-            subtitle: 'R$ 245.000,00'
-        },
-        {
-            id: 3,
-            title: 'Fazenda feliz',
-            subtitle: 'R$ 2.000.000,00'
-        },
-        {
-            id: 4,
-            title: 'Fazenda feia',
-            subtitle: 'R$ 10.000,00'
-        },
-        {
-            id: 5,
-            title: 'Fazenda de marn',
-            subtitle: 'R$ 45.000,00'
-        },
-        {
-            id: 6,
-            title: 'Fazenda de itatiba',
-            subtitle: 'R$ 25.000,00'
-        },
-        {
-            id: 7,
-            title: 'Fazenda do pai',
-            subtitle: 'R$ 245.000,00'
-        },
-        {
-            id: 8,
-            title: 'Fazenda feliz',
-            subtitle: 'R$ 2.000.000,00'
-        },
-        {
-            id: 9,
-            title: 'Fazenda feia',
-            subtitle: 'R$ 10.000,00'
-        },
-    ])
-    
+    // const [ propertiesList, setPropertiesList ] = useState([
+    //     {
+    //         id: 0,
+    //         title: 'Fazenda de marn',
+    //         subtitle: 'R$ 45.000,00'
+    //     },
+    //     {
+    //         id: 1,
+    //         title: 'Fazenda de itatiba',
+    //         subtitle: 'R$ 25.000,00'
+    //     },
+    //     {
+    //         id: 2,
+    //         title: 'Fazenda do pai',
+    //         subtitle: 'R$ 245.000,00'
+    //     },
+    //     {
+    //         id: 3,
+    //         title: 'Fazenda feliz',
+    //         subtitle: 'R$ 2.000.000,00'
+    //     },
+    //     {
+    //         id: 4,
+    //         title: 'Fazenda feia',
+    //         subtitle: 'R$ 10.000,00'
+    //     },
+    //     {
+    //         id: 5,
+    //         title: 'Fazenda de marn',
+    //         subtitle: 'R$ 45.000,00'
+    //     },
+    //     {
+    //         id: 6,
+    //         title: 'Fazenda de itatiba',
+    //         subtitle: 'R$ 25.000,00'
+    //     },
+    //     {
+    //         id: 7,
+    //         title: 'Fazenda do pai',
+    //         subtitle: 'R$ 245.000,00'
+    //     },
+    //     {
+    //         id: 8,
+    //         title: 'Fazenda feliz',
+    //         subtitle: 'R$ 2.000.000,00'
+    //     },
+    //     {
+    //         id: 9,
+    //         title: 'Fazenda feia',
+    //         subtitle: 'R$ 10.000,00'
+    //     },
+    // ]) TESTE
+    const [propertiesList, setPropertieList] = useState([])
+    const [userCredentials, setUserCredentials] = useState({})
+    console.clear()
+    console.log("HOME")
+
+    async function getPropertieList(id) {
+        await api.get(`/projects/${id}/by_user`).then(({data}) => {
+            console.log(data)
+            setPropertieList(data)
+        }).catch((error) => {
+            console.log(error)
+        })
+    }
+
     useEffect(() => {
-        console.log('Usou o efeito')
+        async function getUserInfo() {
+            const userData = JSON.parse(await getData('userCredentials'))
+            setUserCredentials(userData)
+            console.log(userData.id)
+            console.log("NA HOME")
+            getPropertieList(userData.id)
+        }
+        getUserInfo()
     }, [])
 
     function startToAddPropertie() {

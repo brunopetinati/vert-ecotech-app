@@ -6,7 +6,6 @@ import React, { useState } from "react";
 import VertMaskInput from "../../components/VertMaskInput";
 
 export default function FirstScreen({navigation}) {
-
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [whatsapp, setWhatsapp] = useState('')
@@ -14,6 +13,10 @@ export default function FirstScreen({navigation}) {
     const [totalLegalArea, setTotalLegalArea] = useState('')
     const [propertieAddress, setPropertieAddress] = useState('')
 
+    function goToNextScreen() {
+        navigation.navigate('Second')
+    }
+    
     return(
         <>
             <KeyboardAvoidingView style={styles.container}>
@@ -69,7 +72,7 @@ export default function FirstScreen({navigation}) {
             </KeyboardAvoidingView>
             {/* Button Area */}
             <View>
-                <Button onPress={() => navigation.navigate('Second')} containerStyle={{ marginVertical: 16 }} title='Continuar' />
+                <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
                 <Button type="clear" title='Continuar mais tarde' />
             </View>
         </>

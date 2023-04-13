@@ -1,3 +1,4 @@
+import { InfoProvider } from './Context'
 import { ThemeProvider, createTheme } from '@rneui/themed'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -8,19 +9,19 @@ import Main from './screens/Main'
 import AddPropertie from './screens/AddPropertie'
 
 const theme = createTheme({
-  lightColors: {
-    primary: '#93bf85',
-    secondary: '#93bf85',
-    background: '#93bf85'
-  },
-  darkColors: {
-    primary: '#93bf85',
-  },
-  mode: 'light',
+    lightColors: {
+      primary: '#93bf85',
+      secondary: '#93bf85',
+      background: '#93bf85'
+    },
+    darkColors: {
+      primary: '#93bf85',
+    },
+    mode: 'light',
 })
-
+  
 const Stack = createNativeStackNavigator()
-
+  
 export default function App() {
   return (
     <ThemeProvider theme={theme}>

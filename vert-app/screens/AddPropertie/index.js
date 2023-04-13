@@ -22,11 +22,13 @@ export default function AddPropertie() {
     }
 
     const [projectInfo, setProjectInfo] = useState()
+    const userName = "JORGE"
+    console.log(userName)
 
     return(
         <NavigationContainer independent={true}>
             <Stack.Navigator screenOptions={{ headerShown: false, transitionSpec: { open: config, close: config,} }}>
-                <Stack.Screen name="First" component={FirstScreen} />
+                <Stack.Screen initialParams={{ userName: userName }} name="First" component={FirstScreen} />
                 <Stack.Screen name="Second" component={SecondScreen} />
                 <Stack.Screen name="Third" component={ThirdScreen} />
             </Stack.Navigator>

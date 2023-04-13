@@ -3,7 +3,8 @@ import { Button, Input, Text } from '@rneui/themed'
 import { Width } from "../../constants/dimensions"
 import { Ionicons } from '@expo/vector-icons'
 import api from '../../Api'
-import { useState } from 'react';
+import { useState, useContext, useEffect } from 'react'
+import { getData, storeData } from '../../Storage'
 
 export default function Login({navigation}) {
   const [email, setEmail] = useState("")
@@ -20,11 +21,12 @@ export default function Login({navigation}) {
   }
 
   async function tryLogin() {
+    console.log(`email -> ${email} / senha -> ${password}`)
     await api.post('/login/', {
       email: email,
       password: password
     }).then((response) => {
-      console.log(response.data)
+      storeData('userCredentials', response.data)
       navigation.navigate('Main')
     }).catch((error) => {
       console.log(error)
@@ -33,6 +35,17 @@ export default function Login({navigation}) {
     })
     cleanLoginData()
   }
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = JSON.parse(await getData('userCredentials'))
+      setEmail(data.email)
+      setPassword(data.password)
+      console.log('os dados do hd')
+    }
+
+    fetchData()
+  }, [])
 
   function handleLogin() {
     if (email.length > 6 && password.length > 6) {
