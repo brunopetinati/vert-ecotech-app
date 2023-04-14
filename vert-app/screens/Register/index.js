@@ -63,7 +63,11 @@ export default function Register({navigation}) {
             user_type: 'regular',
           }
         ).then((response) => {
-            navigation.navigate('Login')
+            if (response.status === 201) {
+                navigation.navigate('Login')                
+            } else {
+                setFieldErrors(['Email já cadastrado, revise seus dados'])
+            }
             console.log(response.data)
         }).catch((error) => {
             console.log(error)
@@ -74,6 +78,7 @@ export default function Register({navigation}) {
             setErrorModalVisibility(true)
             return
         }
+
         tryRegister()
     }
 
