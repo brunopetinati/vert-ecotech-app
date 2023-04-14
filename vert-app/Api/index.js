@@ -1,4 +1,12 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
+
+async function getToken() {
+  const tokenString = await AsyncStorage.getItem('userCredentials')
+  console.log("tokenString")
+  console.log(tokenString)
+  return JSON.parse(tokenString)?.access
+}
 
 const instance = axios.create({
     baseURL: 'http://3.145.151.125:8000/api',
@@ -7,8 +15,24 @@ const instance = axios.create({
       'Accept': 'application/json',
       'Access-Control-Allow-Headers': '*',
       'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjgxNDM2NjQ5LCJpYXQiOjE2ODE0MDc4NDksImp0aSI6Ijk5NWRiYTU1ZWVhMjQwZTM4ZDE2YzdkYWJkYWFhZjBlIiwidXNlcl9pZCI6OX0.nlNT3vIEOdQtvxMZlxs9hHB7LjqhYRo9PwEeQpW1xlA'}`,
+      'Authorization': `Bearer ${getToken()}`,
     }
 })
 
-export default instance
+axios.interceptors.request.use(
+  async (config) => {
+    config.headers.Authorization = `Bearer ${await getToken()}`
+
+    config.headers.AccessControlAllowOrigin = 'Access-Control-Allow-Origin *'
+
+    // production
+    config.baseURL = `http://3.145.151.125:8000/api`
+    
+    return config
+  },
+  async (error) => {
+    console.log(error)
+  }
+)
+
+export default axios

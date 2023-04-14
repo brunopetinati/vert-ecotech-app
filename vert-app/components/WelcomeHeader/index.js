@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
-import { Height, Width } from "../../constants/dimensions";
-import { Badge } from "@rneui/themed";
+import { StyleSheet, Text, View } from "react-native"
+import { Ionicons } from '@expo/vector-icons'
+import { Height, Width } from "../../constants/dimensions"
+import { Badge } from "@rneui/themed"
 
 export default function WelcomeHeader({ userName, notifications }) {
     return (
         <View style={styles.header}>
             <View style={styles.greetings}>
-                <Text style={styles.bigText}>{`Hello, ${userName}`}</Text>
-                <Text style={styles.smallText}>Welcome back</Text>
+                <Text style={styles.bigText}>{`Olá, ${userName.split(' ')[0]}`}</Text>
+                <Text style={styles.smallText}>Bem-vindo de volta</Text>
             </View>
             <View>
                 {notifications && <Badge

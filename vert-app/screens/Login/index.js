@@ -39,9 +39,9 @@ export default function Login({navigation}) {
   useEffect(() => {
     async function fetchData() {
       const data = JSON.parse(await getData('userCredentials'))
-      setEmail(data.email)
-      setPassword(data.password)
-      console.log('os dados do hd')
+      if(data != null) {
+        setEmail(data.email)
+      }
     }
 
     fetchData()

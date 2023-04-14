@@ -1,6 +1,6 @@
-import { FAB } from "@rneui/themed"
+import { Text, FAB } from "@rneui/themed"
 import { useState, useEffect, useContext } from "react"
-import { FlatList, StyleSheet, Text, View, TouchableOpacity } from "react-native"
+import { FlatList, StyleSheet, View, TouchableOpacity } from "react-native"
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
@@ -9,6 +9,7 @@ import { Height, Width } from "../../constants/dimensions"
 import api from '../../Api'
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { getData } from "../../Storage"
+import { Dialog } from "@rneui/base"
 
 export default function Home({navigation}) {
     // const [ propertiesList, setPropertiesList ] = useState([
@@ -64,13 +65,13 @@ export default function Home({navigation}) {
     //     },
     // ]) TESTE
     const [propertiesList, setPropertieList] = useState([])
-    const [userCredentials, setUserCredentials] = useState({})
+    
+    const [userCredentials, setUserCredentials] = useState(null)
     console.clear()
     console.log("HOME")
 
     async function getPropertieList(id) {
         await api.get(`/projects/${id}/by_user`).then(({data}) => {
-            console.log(data)
             setPropertieList(data)
         }).catch((error) => {
             console.log(error)
@@ -103,34 +104,46 @@ export default function Home({navigation}) {
         )
     }
 
-    return(
-        <SafeAreaView style={{flex: 1}}>
-            <WelcomeHeader userName='Jorge' />
-            <View style={styles.middleScreen}>
-                {/* Top area from middle screen */}
-                <View style={styles.topArea}>
-                    <Text style={styles.title}>My Properties</Text>
+    if(userCredentials == null) {
+        <Dialog isVisible={true} style={{alignItems: 'center'}}>
+            <Dialog.Loading />
+            <Dialog.Title>Carregando...</Dialog.Title>
+        </Dialog>
+    } else {
+        return(
+            <SafeAreaView style={{flex: 1}}>
+                <WelcomeHeader userName={userCredentials.full_name} />
+                <View style={styles.middleScreen}>
+                    {                    
+                        propertiesList.length === 0 ?
+                        <View style={{ alignItems: 'center', paddingTop: 32 }}><Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text></View>
+                        :
+                    <>
+                        <View style={styles.topArea}>
+                            <Text style={styles.title}>Meus projetos</Text>
+                        </View>
+                        <View style={styles.propertiesList}>
+                            <FlatList 
+                                scrollEnabled={true}
+                                data={propertiesList}
+                                keyExtractor={item => item.id}
+                                renderItem={({item}) => renderItem(item)}
+                            />
+                        </View>
+                    </>
+                    }
                 </View>
-                {/* Lista de projetos (propriedades) */}
-                <View style={styles.propertiesList}>
-                    <FlatList 
-                        scrollEnabled={true}
-                        data={propertiesList}
-                        keyExtractor={item => item.id}
-                        renderItem={({item}) => renderItem(item)}
-                    />
-                </View>
-                {/* Bottom area to add properties */}
-            </View>
-            <FAB 
-                style={{position: 'absolute', bottom: 16, right: 16}} 
-                title="Add propertie" 
-                onPress={startToAddPropertie} 
-                icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
-            >
-            </FAB>
-        </SafeAreaView>
-    )
+                
+                <FAB 
+                    style={{position: 'absolute', bottom: 16, right: 16}} 
+                    title="Add propertie" 
+                    onPress={startToAddPropertie} 
+                    icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
+                >
+                </FAB>
+            </SafeAreaView>
+        )    
+    }
 }
 
 const styles = StyleSheet.create({
