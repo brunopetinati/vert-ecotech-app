@@ -10,14 +10,13 @@ export default function ThirdScreen() {
         <KeyboardAvoidingView style={styles.container}>
             {/* Input Fields */}
             <ScrollView  contentContainerStyle={{ marginTop: 64, borderWidth: 1}}>
-                
-            </ScrollView>
-
+            
             {/* Button Area */}
             <View>
                 <Button onPress={finishProjectRegister} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
                 <Button type="clear" title='Continuar mais tarde' />
             </View>
+            </ScrollView>
         </KeyboardAvoidingView>
     )
 }

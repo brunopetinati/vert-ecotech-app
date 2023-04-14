@@ -26,12 +26,10 @@ export default function AddPropertie() {
     console.log(userName)
 
     return(
-        <NavigationContainer independent={true}>
-            <Stack.Navigator screenOptions={{ headerShown: false, transitionSpec: { open: config, close: config,} }}>
-                <Stack.Screen initialParams={{ userName: userName }} name="First" component={FirstScreen} />
-                <Stack.Screen name="Second" component={SecondScreen} />
-                <Stack.Screen name="Third" component={ThirdScreen} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false, transitionSpec: { open: config, close: config,} }}>
+            <Stack.Screen initialParams={{ userName: userName }} name="First" component={FirstScreen} />
+            <Stack.Screen name="Second" component={SecondScreen} />
+            <Stack.Screen name="Third" component={ThirdScreen} />
+        </Stack.Navigator>
     )
 }

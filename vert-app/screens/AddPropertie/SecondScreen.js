@@ -5,6 +5,7 @@ import SelectDropdown from 'react-native-select-dropdown'
 import { useState } from "react";
 import VertMaskInput from "../../components/VertMaskInput";
 import { Masks } from "react-native-mask-input";
+import { Height } from "../../constants/dimensions";
 
 export default function SecondScreen({navigation}) {
     const deficetLegal = ["Sim", "Não"]
@@ -12,12 +13,32 @@ export default function SecondScreen({navigation}) {
     const [cpnj, setCnpj] = useState('')
     const [sicar, setSicar] = useState('')
     const [cod, setCod] = useState('')
-    
+
+    function goToNextScreen() {
+        navigation.navigate('Third')
+    }
+    function goToMainScreen() {
+        navigation.pop()
+    }
+    async function updateProject() {
+        goToNextScreen()
+    }
+    async function saveAndContinueLater() {
+        goToMainScreen()
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(
+                'Projeto salvo com sucesso',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+            )
+        }
+    }
+
     return(
         <>
             <KeyboardAvoidingView style={styles.container}>
                 {/* Form fields */}
-                <ScrollView contentContainerStyle={{ marginTop: 8 }}>
+                <ScrollView contentContainerStyle={styles.internContainer}>
                     <VertMaskInput 
                         label="CNPJ do proprietário"
                         value={cpnj}
@@ -211,12 +232,12 @@ export default function SecondScreen({navigation}) {
                         />
                     </View>
                 </ScrollView>
+                {/* Buttons Area */}
+                <View>
+                    <Button onPress={updateProject} containerStyle={{ marginVertical: 8 }} title='Continuar' />
+                    <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                </View>
             </KeyboardAvoidingView>
-            {/* Buttons Area */}
-            <View>
-                <Button onPress={() => navigation.navigate('Third')} containerStyle={{ marginVertical: 8 }} title='Continuar' />
-                <Button type="clear" title='Continuar mais tarde' />
-            </View>
         </>
     )
 }
@@ -227,5 +248,11 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 32,
-    }
+    },
+    internContainer: {
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
+        padding: 8,
+    },
 })

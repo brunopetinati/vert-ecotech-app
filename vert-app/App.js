@@ -20,19 +20,19 @@ const theme = createTheme({
     mode: 'light',
 })
   
-const Stack = createNativeStackNavigator()
+const ParentStack = createNativeStackNavigator()
   
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
-          <Stack.Screen name="Main" component={Main}/>
-          <Stack.Screen name="AddPropertie" component={AddPropertie}/>
-        </Stack.Navigator>
+        <ParentStack.Navigator screenOptions={{ headerShown: false }}>
+          <ParentStack.Screen name="Login" component={Login} />
+          <ParentStack.Screen name="Register" component={Register} />
+          <ParentStack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
+          <ParentStack.Screen name="Main" component={Main}/>
+          <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
+        </ParentStack.Navigator>
       </NavigationContainer>
     </ThemeProvider>
   )

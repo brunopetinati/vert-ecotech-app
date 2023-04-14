@@ -1,11 +1,15 @@
-import { Button, Input } from "@rneui/themed";
+import { Button } from "@rneui/themed";
 import { KeyboardAvoidingView, ScrollView, View, StyleSheet } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
-import MaskInput, { Masks } from 'react-native-mask-input';
-import React, { useState } from "react";
+import { Masks } from 'react-native-mask-input';
+import { useEffect, useState } from "react";
+import { Platform, ToastAndroid } from 'react-native'
 import VertMaskInput from "../../components/VertMaskInput";
+import api from '../../Api'
+import { getData } from '../../Storage'
 
 export default function FirstScreen({navigation}) {
+    const [userCredentials, setUserCredentials] = useState({})
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [whatsapp, setWhatsapp] = useState('')
@@ -13,15 +17,49 @@ export default function FirstScreen({navigation}) {
     const [totalLegalArea, setTotalLegalArea] = useState('')
     const [propertieAddress, setPropertieAddress] = useState('')
 
+    useEffect(() => {
+        async function getUserData() {
+            const userData = JSON.parse(await getData('userCredentials'))
+            setUserCredentials(userData)
+        }
+
+        getUserData()
+    }, [])
     function goToNextScreen() {
         navigation.navigate('Second')
+    }
+    function goToMainScreen() {
+        navigation.pop()
+    }
+    async function createProject() {
+        api.post('/projects/', {
+            address: propertieAddress,
+            legal_reserve_area: totalLegalArea,
+            owner: userCredentials.id,
+            reserve_legal_status: totalLegalArea,
+            total_area: totalArea,
+        }).then((response) => {
+
+        }).catch((error) => {
+
+        })
+    }
+    async function saveAndContinueLater() {
+        goToMainScreen()
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(
+                'Projeto salvo com sucesso',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+            )
+        }
     }
     
     return(
         <>
             <KeyboardAvoidingView style={styles.container}>
                 {/* Form fields */}
-                <ScrollView contentContainerStyle={{ marginTop: 16 }}>
+                <ScrollView contentContainerStyle={styles.container}>
                     <VertMaskInput 
                         label="Nome do proprietário"
                         value={name}
@@ -68,13 +106,13 @@ export default function FirstScreen({navigation}) {
                         leftIcon={<Ionicons color='#93bf85' size={20} name="map-outline" />}
                         setValue={setPropertieAddress}
                     />
-                </ScrollView>
+                    {/* Button Area */}
+                    <View>
+                        <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
+                        <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                    </View>
+                </ScrollView>   
             </KeyboardAvoidingView>
-            {/* Button Area */}
-            <View>
-                <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
-                <Button type="clear" title='Continuar mais tarde' />
-            </View>
         </>
     )
 }
