@@ -18,7 +18,7 @@ export default function SecondScreen({navigation}) {
         navigation.navigate('Third')
     }
     function goToMainScreen() {
-        navigation.pop()
+        navigation.navigate('Main')
     }
     async function updateProject() {
         goToNextScreen()

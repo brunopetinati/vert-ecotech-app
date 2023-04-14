@@ -30,7 +30,7 @@ export default function App() {
           <ParentStack.Screen name="Login" component={Login} />
           <ParentStack.Screen name="Register" component={Register} />
           <ParentStack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
-          <ParentStack.Screen name="Main" component={Main}/>
+          <ParentStack.Screen options={{gestureEnabled: false}} name="Main" component={Main}/>
           <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
         </ParentStack.Navigator>
       </NavigationContainer>

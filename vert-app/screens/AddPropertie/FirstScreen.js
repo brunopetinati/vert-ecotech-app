@@ -52,6 +52,8 @@ export default function FirstScreen({navigation}) {
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
             )
+        } else {
+            
         }
     }
     
@@ -122,6 +124,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
-        padding: 32,
+        padding: Platform.OS === 'ios' ? 16 : 24,
     },
 })

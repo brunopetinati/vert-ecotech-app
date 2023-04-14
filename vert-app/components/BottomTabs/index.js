@@ -16,12 +16,6 @@ export default function BottomTabs() {
       name="Home" 
       component={Home} 
       />
-      <Tab.Screen options={{
-        tabBarIcon: ({ color, size }) => (<Ionicons name='cash-outline' color={color} size={size}/>) 
-      }} 
-      name="CarbonCreditProjects" 
-      component={CarbonCreditProjects} 
-      />
     </Tab.Navigator>
   )
 }

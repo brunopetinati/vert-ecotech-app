@@ -1,9 +1,11 @@
-import { useEffect } from "react";
-import BottomTabs from "../../components/BottomTabs";
+import { useEffect } from "react"
+import BottomTabs from "../../components/BottomTabs"
 
 export default function Main({ navigation }) {
     useEffect(() =>
-        navigation.addListener('beforeRemove', (e) => { e.preventDefault() })
+        navigation.addListener('beforeRemove', (e) => { 
+            e.preventDefault() 
+        })
     )
 
     return <BottomTabs />

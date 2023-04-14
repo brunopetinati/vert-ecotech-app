@@ -1,6 +1,6 @@
 import { Text, FAB } from "@rneui/themed"
 import { useState, useEffect, useContext } from "react"
-import { FlatList, StyleSheet, View, TouchableOpacity } from "react-native"
+import { FlatList, StyleSheet, View, TouchableOpacity, Image } from "react-native"
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
@@ -111,12 +111,15 @@ export default function Home({navigation}) {
         </Dialog>
     } else {
         return(
-            <SafeAreaView style={{flex: 1}}>
+            <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
                 <WelcomeHeader userName={userCredentials.full_name} />
                 <View style={styles.middleScreen}>
-                    {                    
+                    {
                         propertiesList.length === 0 ?
-                        <View style={{ alignItems: 'center', paddingTop: 32 }}><Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text></View>
+                        <View style={{ alignItems: 'center', paddingTop: 32 }}>
+                            <Image style={styles.emptyListResource} source={require('../../assets/empty_list.gif')}/>
+                            <Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text>
+                        </View>
                         :
                     <>
                         <View style={styles.topArea}>
@@ -147,6 +150,10 @@ export default function Home({navigation}) {
 }
 
 const styles = StyleSheet.create({
+    emptyListResource: {
+        width: '80%',
+        height: '80%',
+    },
     propertiesList: {
         alignItems: 'center',
         height: Height*0.62,

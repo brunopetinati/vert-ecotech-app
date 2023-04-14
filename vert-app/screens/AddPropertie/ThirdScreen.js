@@ -1,4 +1,5 @@
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
+import { Button, } from "@rneui/themed"
 
 export default function ThirdScreen() {
 
