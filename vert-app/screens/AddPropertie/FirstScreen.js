@@ -10,12 +10,11 @@ import { getData } from '../../Storage'
 
 export default function FirstScreen({navigation}) {
     const [userCredentials, setUserCredentials] = useState({})
-    const [name, setName] = useState('')
-    const [email, setEmail] = useState('')
-    const [whatsapp, setWhatsapp] = useState('')
     const [totalArea, setTotalArea] = useState('')
     const [totalLegalArea, setTotalLegalArea] = useState('')
     const [propertieAddress, setPropertieAddress] = useState('')
+    const [cpnj, setCnpj] = useState('')
+    const [sicar, setSicar] = useState('')
 
     useEffect(() => {
         async function getUserData() {
@@ -33,6 +32,8 @@ export default function FirstScreen({navigation}) {
     }
     async function createProject() {
         api.post('/projects/', {
+            cnpj: cpnj,
+            sicar_code: sicar,
             address: propertieAddress,
             legal_reserve_area: totalLegalArea,
             owner: userCredentials.id,
@@ -63,28 +64,43 @@ export default function FirstScreen({navigation}) {
                 {/* Form fields */}
                 <ScrollView contentContainerStyle={styles.container}>
                     <VertMaskInput 
-                        label="Nome do proprietário"
-                        value={name}
+                        label="CNPJ do proprietário"
+                        value={cpnj}
                         maxLength={100}
+                        mask={Masks.BRL_CNPJ}
                         leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />}
-                        setValue={setName}
+                        setValue={setCnpj}
                     />
+
                     <VertMaskInput 
-                        label="Whatsapp"
-                        keyboardType="numeric"
-                        value={whatsapp}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="logo-whatsapp" />}
-                        setValue={setWhatsapp}
-                        mask={Masks.BRL_PHONE}
+                        label="Código SICAR"
+                        value={sicar}
+                        maxLength={150}
+                        //'99-9999999-9999.9999.9999.9999.9999.9999.9999.9999'
+                        mask={[/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '-', 
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '-',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',    
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                '.',
+                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
+                            ]}
+                        leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />}
+                        setValue={setSicar}
                     />
-                    <VertMaskInput 
-                        label="Email do proprietário"
-                        keyboardType="email-address"
-                        value={email}
-                        maxLength={20}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="mail-outline" />}
-                        setValue={setEmail}
-                    />
+
                     <VertMaskInput 
                         label="Área total da propriedade (ha)"
                         keyboardType="numeric"
@@ -124,6 +140,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
-        padding: Platform.OS === 'ios' ? 16 : 24,
+        padding: Platform.OS === 'ios' ? 16 : 20,
     },
 })

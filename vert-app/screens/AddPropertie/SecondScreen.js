@@ -1,18 +1,15 @@
-import { Button, Input } from "@rneui/themed";
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
-import { Ionicons } from '@expo/vector-icons';
+import { Button, Input } from "@rneui/themed"
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
+import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
-import { useState } from "react";
-import VertMaskInput from "../../components/VertMaskInput";
-import { Masks } from "react-native-mask-input";
-import { Height } from "../../constants/dimensions";
+import { useState } from "react"
+import VertMaskInput from "../../components/VertMaskInput"
+import { Masks } from "react-native-mask-input"
+import { Height } from "../../constants/dimensions"
 
 export default function SecondScreen({navigation}) {
     const deficetLegal = ["Sim", "Não"]
     const countries = ["Ativa", "Inativa"]
-    const [cpnj, setCnpj] = useState('')
-    const [sicar, setSicar] = useState('')
-    const [cod, setCod] = useState('')
 
     function goToNextScreen() {
         navigation.navigate('Third')
@@ -39,31 +36,6 @@ export default function SecondScreen({navigation}) {
             <KeyboardAvoidingView style={styles.container}>
                 {/* Form fields */}
                 <ScrollView contentContainerStyle={styles.internContainer}>
-                    <VertMaskInput 
-                        label="CNPJ do proprietário"
-                        value={cpnj}
-                        maxLength={100}
-                        mask={Masks.BRL_CNPJ}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />}
-                        setValue={setCnpj}
-                    />
-
-                    <VertMaskInput 
-                        label="Código da matrícula"
-                        value={cod}
-                        maxLength={150}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="reader-outline" />}
-                        setValue={setCod}
-                    />
-
-                    <VertMaskInput 
-                        label="Código SICAR"
-                        value={sicar}
-                        maxLength={150}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />}
-                        setValue={setSicar}
-                    />
-
                     <View>
                         <SelectDropdown 
                             dropdownIconPosition="left"

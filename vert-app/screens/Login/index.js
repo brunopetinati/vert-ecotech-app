@@ -48,14 +48,14 @@ export default function Login({navigation}) {
   }, [])
 
   function handleLogin() {
-    if (email.length > 6 && password.length > 6) {
+    if (email.length > 6 && password.length > 5) {
       tryLogin() 
     } 
     if (email.length <= 6) {
       setEmailError("Email menor que 6 caracteres")
       cleanLoginData()
     }
-    if (password.length <= 6) {
+    if (password.length < 6) {
       setPasswordError("Senha menor que 6 caracteres")
       cleanLoginData()
     }

@@ -3,8 +3,6 @@ import axios from 'axios'
 
 async function getToken() {
   const tokenString = await AsyncStorage.getItem('userCredentials')
-  console.log("tokenString")
-  console.log(tokenString)
   return JSON.parse(tokenString)?.access
 }
 
@@ -26,7 +24,7 @@ axios.interceptors.request.use(
     config.headers.AccessControlAllowOrigin = 'Access-Control-Allow-Origin *'
 
     // production
-    config.baseURL = `http://3.145.151.125:8000/api`
+    config.baseURL = `http://18.218.97.13:8000/api`
     
     return config
   },

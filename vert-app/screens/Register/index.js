@@ -8,6 +8,7 @@ import VertMaskInput from '../../components/VertMaskInput'
 import { Masks } from 'react-native-mask-input'
 
 export default function Register({navigation}) {
+
     const [errorModalVisibility, setErrorModalVisibility] = useState(false)
     const [fullName, setFullName] = useState('')
     const [email, setEmail] = useState('')
@@ -26,6 +27,7 @@ export default function Register({navigation}) {
             hasErrors = true
         }
         if (email.length < 6) {
+            console.log(email)
             setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um email com 6 caracteres ou mais'])
             hasErrors = true
         }
@@ -41,8 +43,8 @@ export default function Register({navigation}) {
             setFieldErrors(fieldErrors => [...fieldErrors, 'Digite uma cidade válida'])
             hasErrors = true
         }
-        if (state.length != 3) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um email com 6 caracteres ou mais'])
+        if (state.length != 2) {
+            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um estado válido'])
             hasErrors = true
         }
         if(password != confirmPassword) {

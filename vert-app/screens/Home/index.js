@@ -4,7 +4,7 @@ import { FlatList, StyleSheet, View, TouchableOpacity, Image } from "react-nativ
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'
 import { Height, Width } from "../../constants/dimensions"
 import api from '../../Api'
 import AsyncStorage from "@react-native-async-storage/async-storage"
@@ -65,10 +65,8 @@ export default function Home({navigation}) {
     //     },
     // ]) TESTE
     const [propertiesList, setPropertieList] = useState([])
-    
     const [userCredentials, setUserCredentials] = useState(null)
     console.clear()
-    console.log("HOME")
 
     async function getPropertieList(id) {
         await api.get(`/projects/${id}/by_user`).then(({data}) => {
@@ -93,12 +91,17 @@ export default function Home({navigation}) {
         navigation.navigate('AddPropertie')
     }
 
+    function openProject(project) {
+        console.log(project)
+        navigation.navigate('Main', { screen: 'First' })
+    }
+
     function renderItem(propertie) {
         return(
             <ListItem>
-                <TouchableOpacity onPress={() => console.log(propertie.id)} style={styles.container}>
-                    <Text style={styles.title}>{propertie.title}</Text>
-                    <Text style={styles.subtitle}>{propertie.subtitle}</Text>
+                <TouchableOpacity onPress={() => openProject(propertie)} style={styles.container}>
+                    <Text style={styles.title}>Teste {propertie.title}</Text>
+                    <Text style={styles.subtitle}>Nº: {propertie.id}</Text>
                 </TouchableOpacity>
             </ListItem>
         )
@@ -121,19 +124,19 @@ export default function Home({navigation}) {
                             <Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text>
                         </View>
                         :
-                    <>
-                        <View style={styles.topArea}>
-                            <Text style={styles.title}>Meus projetos</Text>
-                        </View>
-                        <View style={styles.propertiesList}>
-                            <FlatList 
-                                scrollEnabled={true}
-                                data={propertiesList}
-                                keyExtractor={item => item.id}
-                                renderItem={({item}) => renderItem(item)}
-                            />
-                        </View>
-                    </>
+                        <>
+                            <View style={styles.topArea}>
+                                <Text style={styles.title}>Meus projetos</Text>
+                            </View>
+                            <View style={styles.propertiesList}>
+                                <FlatList 
+                                    scrollEnabled={true}
+                                    data={propertiesList}
+                                    keyExtractor={item => item.id}
+                                    renderItem={({item}) => renderItem(item)}
+                                />
+                            </View>
+                        </>
                     }
                 </View>
                 
