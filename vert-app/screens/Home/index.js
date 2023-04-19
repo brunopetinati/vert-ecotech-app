@@ -64,7 +64,7 @@ export default function Home({navigation}) {
     //         subtitle: 'R$ 10.000,00'
     //     },
     // ]) TESTE
-    const [propertiesList, setPropertieList] = useState([])
+    const [propertiesList, setPropertieList] = useState(null)
     const [userCredentials, setUserCredentials] = useState(null)
     console.clear()
 
@@ -93,7 +93,7 @@ export default function Home({navigation}) {
 
     function openProject(project) {
         console.log(project)
-        navigation.navigate('Main', { screen: 'First' })
+        navigation.navigate('AddPropertie', { screen: 'First' })
     }
 
     function renderItem(propertie) {
@@ -118,7 +118,7 @@ export default function Home({navigation}) {
                 <WelcomeHeader userName={userCredentials.full_name} />
                 <View style={styles.middleScreen}>
                     {
-                        propertiesList.length === 0 ?
+                        propertiesList == null ?
                         <View style={{ alignItems: 'center', paddingTop: 32 }}>
                             <Image style={styles.emptyListResource} source={require('../../assets/empty_list.gif')}/>
                             <Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text>
@@ -145,8 +145,7 @@ export default function Home({navigation}) {
                     title="Add propertie" 
                     onPress={startToAddPropertie} 
                     icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
-                >
-                </FAB>
+                />
             </SafeAreaView>
         )    
     }

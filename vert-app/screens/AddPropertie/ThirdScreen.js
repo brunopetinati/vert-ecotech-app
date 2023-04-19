@@ -1,5 +1,6 @@
 import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
 import { Button, } from "@rneui/themed"
+import FileCardList from '../../components/FileCardList';
 
 export default function ThirdScreen() {
 
@@ -8,22 +9,24 @@ export default function ThirdScreen() {
     }
 
     return(
-        <KeyboardAvoidingView style={styles.container}>
+        <View style={styles.container}>
             {/* Input Fields */}
-            <ScrollView  contentContainerStyle={{ marginTop: 64, borderWidth: 1}}>
-            
+            <View style={styles.container}>
+                <FileCardList />
+            </View>
             {/* Button Area */}
             <View>
                 <Button onPress={finishProjectRegister} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
                 <Button type="clear" title='Continuar mais tarde' />
             </View>
-            </ScrollView>
-        </KeyboardAvoidingView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
