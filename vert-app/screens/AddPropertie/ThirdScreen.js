@@ -1,23 +1,44 @@
-import { KeyboardAvoidingView, ScrollView, StyleSheet, View } from "react-native"
+import { KeyboardAvoidingView, ScrollView, StyleSheet, ToastAndroid, View } from "react-native"
 import { Button, } from "@rneui/themed"
-import FileCardList from '../../components/FileCardList';
+import FileCardList from '../../components/FileCardList'
+import { useEffect } from "react"
 
-export default function ThirdScreen() {
+export default function ThirdScreen({navigation}) {
 
-    async function finishProjectRegister() {
-        
+    function goToMainScreen() {
+        navigation.navigate('Main')
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(
+                'Projeto salvo com sucesso',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+            )
+        }
+    }
+    async function updateProject() {
+        goToMainScreen()
+    }
+    async function saveAndContinueLater() {
+        goToMainScreen()
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(
+                'Projeto salvo com sucesso',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+            )
+        }
     }
 
     return(
         <View style={styles.container}>
             {/* Input Fields */}
-            <View style={styles.container}>
+            <View style={styles.cardContainer}>
                 <FileCardList />
             </View>
             {/* Button Area */}
             <View>
-                <Button onPress={finishProjectRegister} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
-                <Button type="clear" title='Continuar mais tarde' />
+                <Button onPress={updateProject} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
+                <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
             </View>
         </View>
     )
@@ -26,7 +47,13 @@ export default function ThirdScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
+        alignContent: 'center',
         justifyContent: 'center',
+        padding: 32,
     },
+    cardContainer: {
+        flex: 1,
+        alignContent: 'center',
+        justifyContent: 'center',
+    }
 })

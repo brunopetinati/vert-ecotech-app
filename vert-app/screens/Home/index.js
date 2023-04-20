@@ -100,7 +100,7 @@ export default function Home({navigation}) {
         return(
             <ListItem>
                 <TouchableOpacity onPress={() => openProject(propertie)} style={styles.container}>
-                    <Text style={styles.title}>Teste {propertie.title}</Text>
+                    <Text style={styles.title}>{propertie.title}</Text>
                     <Text style={styles.subtitle}>Nº: {propertie.id}</Text>
                 </TouchableOpacity>
             </ListItem>
