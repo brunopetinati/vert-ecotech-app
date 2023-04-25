@@ -4,29 +4,56 @@ import { Ionicons } from '@expo/vector-icons'
 import { useState } from "react"
 import * as DocumentPicker from 'expo-document-picker'
 
-export default function CardArquivo() {
+export default function CardArquivo({ 
+  setCertMatricula, 
+  setCarSicar, 
+  setPropertyPolygon, 
+  setCCIR, 
+  setRegularityCertificate,
+}) 
+{
 
-    const [certMatricula, setCertMatricula] = useState(null) //aceita .pdf
-    const [carSicar, setCarSicar] = useState(null) //aceita .pdf
-    const [propertyPolygon, setPropertyPolygon] = useState(null) //aceita .kmz ou .kml
-    const [cCIR, setCCIR] = useState(null) //aceita .pdf
-    const [regularityCertificate, setRegularityCertificate] = useState(null) //aceita .pdf
-  
-    
-    function selectFile(fileType) {
-      // Função para selecionar o arquivo
+    async function selectFile(fileType) {
+      let file = null
+
+      switch (fileType) {
+        case 'certidão de matricula':
+            file = await docPicker()
+            setCertMatricula(file)
+          break
+        case 'PDF do CAR(SICAR)':
+          file = await docPicker()
+          setCarSicar(file)
+          break
+        case 'polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)':
+          file = await docPicker()
+          setPropertyPolygon(file)
+          break
+        case 'cópia do CCIR':
+          file = await docPicker()
+          setCCIR(file)
+          break
+        case 'certidão de regularidade da dívida federal':
+          file = await docPicker()
+          setRegularityCertificate(file)
+          break
+        default:
+          console.log(file)
+          break
+      }
     }
 
     async function docPicker() {
       const response = await DocumentPicker.getDocumentAsync({})
       console.log(response)
+      return response
     }
 
     function cardItem(item) {
       return (
         <TouchableOpacity
           style={styles.boxCard}
-          onPress={docPicker}
+          onPress={() => selectFile()}
         >
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.title}</Text>
   
@@ -48,7 +75,7 @@ export default function CardArquivo() {
   
           <Text style={styles.fileDescription}>adjaisjdiasjdiasjiasjd.pdf</Text>
         </View>
-      );
+      )
     }
   
     const fields = [
@@ -77,27 +104,25 @@ export default function CardArquivo() {
         file: null,
         avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
       },
-    ];
+    ]
   
     return (
       <SafeAreaView style={{ alignItems: 'center', padding: 32 }}>
         <FlatList
           data={fields}
           renderItem={({ item }) =>
-            certMatricula === null ? (
-                cardItem(item)
-
-            ) : (
-              filledItem(item)
-
-            )
+            item == null 
+            ? 
+            (cardItem(item.title)) 
+            : 
+            (filledItem(item))
           }
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
         />
       </SafeAreaView>
     );
-  }
+}
 
 const styles = StyleSheet.create({
     boxCard: {
