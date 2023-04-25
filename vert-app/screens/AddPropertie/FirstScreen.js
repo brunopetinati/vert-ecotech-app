@@ -68,7 +68,7 @@ export default function FirstScreen({navigation}) {
                         value={cpnj}
                         maxLength={100}
                         mask={Masks.BRL_CNPJ}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />}
+                        leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
                         setValue={setCnpj}
                     />
 
@@ -97,7 +97,7 @@ export default function FirstScreen({navigation}) {
                                 '.',
                                 /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
                             ]}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />}
+                        leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
                         setValue={setSicar}
                     />
 
@@ -106,7 +106,7 @@ export default function FirstScreen({navigation}) {
                         keyboardType="numeric"
                         value={totalArea}
                         maxLength={20}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="leaf-outline" />}
+                        leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
                         setValue={setTotalArea}
                     />
                     <VertMaskInput 
@@ -114,14 +114,14 @@ export default function FirstScreen({navigation}) {
                         keyboardType="numeric"
                         value={totalLegalArea}
                         maxLength={20}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="expand-outline" />}
+                        leftIcon={<Ionicons color='#00AE00' size={20} name="expand-outline" />}
                         setValue={setTotalLegalArea}
                     />
                     <VertMaskInput 
                         label="Endereço da propriedade"
                         value={propertieAddress}
                         maxLength={120}
-                        leftIcon={<Ionicons color='#93bf85' size={20} name="map-outline" />}
+                        leftIcon={<Ionicons color='#00AE00' size={20} name="map-outline" />}
                         setValue={setPropertieAddress}
                     />
                     {/* Button Area */}

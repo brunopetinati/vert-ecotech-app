@@ -1,6 +1,6 @@
 import { Button, Dialog, Input, Text } from '@rneui/themed'
 import { useState } from 'react'
-import { StyleSheet, ScrollView, KeyboardAvoidingView, View } from "react-native"
+import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Image } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import { Width } from '../../constants/dimensions'
 import api from '../../Api'
@@ -8,6 +8,7 @@ import VertMaskInput from '../../components/VertMaskInput'
 import { Masks } from 'react-native-mask-input'
 import CadastroLoading from '../../assets/cadastro.gif'
 import LoadingAnimation from '../../components/LoadingAnimation'
+import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
 
 export default function Register({navigation}) {
     const [isLoading, setLoading] = useState(false)
@@ -102,37 +103,38 @@ export default function Register({navigation}) {
             }
             
             <KeyboardAvoidingView style={styles.loginBox}>
+                <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
                 <ScrollView contentContainerStyle={{ marginTop: 64 }}>
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='person-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='person-outline'/>}
                         maxLength={100} 
                         value={fullName} 
                         setValue={setFullName} 
                         label="nome completo"
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='mail-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='mail-outline'/>}
                         maxLength={60} 
                         value={email} 
                         setValue={setEmail} 
                         label="email" 
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='key-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='key-outline'/>}
                         maxLength={30} 
                         value={password} 
                         setValue={setPassword} 
                         label="senha" 
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='key-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='key-outline'/>}
                         maxLength={30} 
                         value={confirmPassword} 
                         setValue={setConfirmPassword} 
                         label="confirmar senha" 
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='logo-whatsapp'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='logo-whatsapp'/>}
                         maxLength={15} 
                         mask={Masks.BRL_PHONE}
                         value={whatsapp} 
@@ -141,14 +143,14 @@ export default function Register({navigation}) {
                         label="whatsapp" 
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='location-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='location-outline'/>}
                         maxLength={30} 
                         value={city} 
                         setValue={setCity} 
                         label="cidade" 
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#93bf85' name='location-outline'/>}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='location-outline'/>}
                         maxLength={2} 
                         value={state} 
                         setValue={setState} 
@@ -189,5 +191,11 @@ const styles = StyleSheet.create({
     loginArea: {
       padding: 16,
       width: Width*0.8 
-    }
+    },
+    vertIcon: {
+        height: 120, // ajuste a altura de acordo com o tamanho da imagem
+        width: '100%', // defina a largura para corresponder à largura do Input
+        resizeMode: 'contain', // redimensione a imagem para caber dentro do espaço disponível
+        marginTop: 16,
+    },
 })

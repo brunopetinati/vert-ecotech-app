@@ -4,10 +4,10 @@
     "slug": "vert-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/leaf_animation.gif",
+    "icon": "./assets/marca-vert.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/leaf_animation.gif",
+      "image": "./assets/marca-vert.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -20,11 +20,15 @@
     ],
     "ios": {
       "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
+      },
       "usesIcloudStorage": true,
       "bundleIdentifier": "com.yourname.yourapp"
     },
     "plugins": ["expo-document-picker"],
     "android": {
+      "permissions": ["android.permission.READ_EXTERNAL_STORAGE"],
       "adaptiveIcon": {
         "foregroundImage": "./assets/leaf_animation.gif",
         "backgroundColor": "#ffffff"

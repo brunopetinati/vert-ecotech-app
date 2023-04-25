@@ -40,7 +40,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Status do SICAR"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}
@@ -64,7 +64,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Possui déficit de reserva legal?"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}
@@ -88,7 +88,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Possui dívida federal?"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}
@@ -112,7 +112,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Status da matrícula"
                             data={countries}
                             buttonStyle={{width: '100%'}}
@@ -136,7 +136,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Georeferenciamento no SIGEF"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}
@@ -160,7 +160,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Situação da reserva legal"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}
@@ -184,7 +184,7 @@ export default function SecondScreen({navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#93bf85' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Possui unidade de consevação?"
                             data={deficetLegal}
                             buttonStyle={{width: '100%'}}

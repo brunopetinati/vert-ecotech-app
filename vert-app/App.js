@@ -10,12 +10,12 @@ import AddPropertie from './screens/AddPropertie'
 
 const theme = createTheme({
     lightColors: {
-      primary: '#93bf85',
-      secondary: '#93bf85',
-      background: '#93bf85'
+      primary: '#00AE00',
+      secondary: '#00AE00',
+      background: '#00AE00'
     },
     darkColors: {
-      primary: '#93bf85',
+      primary: '#00AE00',
     },
     mode: 'light',
 })

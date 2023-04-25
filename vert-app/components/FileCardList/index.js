@@ -1,8 +1,8 @@
-import { SafeAreaView, StyleSheet, View, ScrollView, FlatList, TouchableOpacity } from "react-native"
+import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity } from "react-native"
 import { Text } from '@rneui/themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from "react"
-import DocumentPicker from 'react-native-document-picker'
+import * as DocumentPicker from 'expo-document-picker'
 
 export default function CardArquivo() {
 
@@ -17,45 +17,21 @@ export default function CardArquivo() {
       // Função para selecionar o arquivo
     }
 
-    async function pickDocument() {
-        try {
-            let result = 0
-            await DocumentPicker.pick({
-            type: [DocumentPicker.types.pdf],
-          }).then((response) => {
-            console.log(response)
-          }).catch((error) => {
-            console.log(error)
-          })
-          
-          console.log(
-            'Arquivo selecionado:',
-            result.uri,
-            result.type, // mime type do arquivo
-            result.name,
-            result.size
-          );
-          // faça algo com o arquivo selecionado aqui
-        } catch (err) {
-          if (DocumentPicker.isCancel(err)) {
-            // operação cancelada pelo usuário
-          } else {
-            // erro desconhecido
-            console.error('Erro ao selecionar arquivo:', err)
-          }
-        }
-      }
-      
+    async function docPicker() {
+      const response = await DocumentPicker.getDocumentAsync({})
+      console.log(response)
+    }
+
     function cardItem(item) {
       return (
         <TouchableOpacity
           style={styles.boxCard}
-          onPress={pickDocument}
+          onPress={docPicker}
         >
           <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.title}</Text>
   
           <View style={styles.cloudImage}>
-            <Ionicons name="cloud-upload-outline" color="#93bf85" size={64} />
+            <Ionicons name="cloud-upload-outline" color="#00AE00" size={64} />
           </View>
   
           <Text style={styles.fileDescription}>Envie um arquivo</Text>
@@ -67,7 +43,7 @@ export default function CardArquivo() {
       return (
         <View style={styles.boxCardFilled}>
           <View Style={styles.docImage}>
-            <Ionicons name="document-text-outline" color="#93bf85" size={44} />
+            <Ionicons name="document-text-outline" color="#00AE00" size={44} />
           </View>
   
           <Text style={styles.fileDescription}>adjaisjdiasjdiasjiasjd.pdf</Text>
@@ -130,7 +106,7 @@ const styles = StyleSheet.create({
         borderRadius: 8, 
         borderStyle: 'dashed', 
         borderWidth: 3, 
-        borderColor: "#93bf85",
+        borderColor: "#00AE00",
         width: "100%",
         marginVertical: 16,
         padding: 16,
@@ -141,7 +117,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 8,  
         borderWidth: 3, 
-        borderColor: "#93bf85",
+        borderColor: "#00AE00",
         width: "80%",
         margin: 16,
         padding: 16, 

@@ -16,7 +16,7 @@ export default function WelcomeHeader({ userName, notifications }) {
                     value={notifications}
                     containerStyle={{ position: 'absolute', top: -10, left: 20 }}
                 />}
-                <Ionicons style={styles.notificationIcon} size={32} name="notifications-outline" color='#93bf85'/>
+                <Ionicons style={styles.notificationIcon} size={32} name="notifications-outline" color='#00AE00'/>
             </View>
         </View>
     )
@@ -24,7 +24,7 @@ export default function WelcomeHeader({ userName, notifications }) {
 
 const styles = StyleSheet.create({
     header: {
-        borderBottomColor: '#93bf85',
+        borderBottomColor: '#00AE00',
         borderBottomWidth: 1,
         paddingTop: 32,
         paddingHorizontal: 32,

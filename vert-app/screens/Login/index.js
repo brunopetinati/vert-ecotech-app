@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, View, Platform, PermissionsAndroid } from "react-native"
+import { StyleSheet, SafeAreaView, View, Platform, PermissionsAndroid, Image } from "react-native"
 import { Button, Input, Text } from '@rneui/themed'
 import { Width } from "../../constants/dimensions"
 import { Ionicons } from '@expo/vector-icons'
@@ -7,6 +7,7 @@ import { useState, useContext, useEffect } from 'react'
 import { getData, storeData } from '../../Storage'
 import LoadingAnimation from "../../components/LoadingAnimation"
 import PlantaLoading from '../../assets/leaf_animation.gif'
+import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
 
 export default function Login({navigation}) {
   const [isLoading, setLoading] = useState(false)
@@ -41,31 +42,28 @@ export default function Login({navigation}) {
   }
 
   async function askAndroidPermission () {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: 'Vert App, permissão de arquivos',
-          message:
-            'Precisamos das opções de ',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancelar',
-          buttonPositive: 'OK',
-        },
-      )
-      // Checa o que a permissõ
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('You can use the camera');
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
+    console.log("AAAAAAA")
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: 'Permissão para ler documentos',
+        message:
+          'Pedimos permissão para seus arquivos para poder enviar seus documentos referentes aos projetos.',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    )
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log('You can use the camera')
+    } else {
+      console.log('Camera permission denied')
     }
-  };
+  }
 
   async function askPermissions() {
     if(Platform.OS == 'android') {
+      console.log("TO NUM ANDROID")
       askAndroidPermission()
     }
   }
@@ -103,25 +101,26 @@ export default function Login({navigation}) {
         <SafeAreaView style={styles.loginBox}>
 
           <View style={styles.loginArea}>
+            <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
             <Input 
               value={email} 
               onChangeText={setEmail} 
               errorMessage={emailError} 
-              leftIcon={<Ionicons color='#93bf85' size={20} name="person-outline" />} 
+              leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />} 
               placeholder="email" 
             />
             <Input 
               value={password} 
               onChangeText={setPassword} 
               errorMessage={passwordError} 
-              leftIcon={<Ionicons color='#93bf85' size={20} name="key-outline" />} 
+              leftIcon={<Ionicons color='#00AE00' size={20} name="key-outline" />} 
               rightIcon={<Ionicons onPress={() => { 
                 if (isPasswordVisible) {
                   setPasswordVisibility(false)
                 } else {
                   setPasswordVisibility(true)
                 }
-              }} color='#93bf85' size={20} name="eye-outline" />} 
+              }} color='#00AE00' size={20} name="eye-outline" />} 
               secureTextEntry={isPasswordVisible}  placeholder="senha" 
             />
 
@@ -150,5 +149,10 @@ const styles = StyleSheet.create({
     loginArea: {
       padding: 16,
       width: Width*0.8 
-    }
+    },
+    vertIcon: {
+      height: 250, // ajuste a altura de acordo com o tamanho da imagem
+      width: '100%', // defina a largura para corresponder à largura do Input
+      resizeMode: 'contain' // redimensione a imagem para caber dentro do espaço disponível
+    },
 })

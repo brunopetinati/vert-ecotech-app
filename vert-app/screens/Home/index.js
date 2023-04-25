@@ -10,6 +10,7 @@ import api from '../../Api'
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { getData } from "../../Storage"
 import { Dialog } from "@rneui/base"
+import LoadingAnimation from "../../components/LoadingAnimation"
 
 export default function Home({navigation}) {
     // const [ propertiesList, setPropertiesList ] = useState([
@@ -116,9 +117,12 @@ export default function Home({navigation}) {
         return(
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
                 <WelcomeHeader userName={userCredentials.full_name} />
+                { propertiesList == null ?
+                <LoadingAnimation text={'Carregando seus projetos'}/>
+                :
                 <View style={styles.middleScreen}>
                     {
-                        propertiesList == null ?
+                        propertiesList.length == 0 ?
                         <View style={{ alignItems: 'center', paddingTop: 32 }}>
                             <Image style={styles.emptyListResource} source={require('../../assets/empty_list.gif')}/>
                             <Text h1={true} h1Style={{fontSize: 16, fontWeight: 'bold'}}>Nenhum projeto cadastrado ainda</Text>
@@ -139,10 +143,10 @@ export default function Home({navigation}) {
                         </>
                     }
                 </View>
-                
+                }
                 <FAB 
                     style={{position: 'absolute', bottom: 16, right: 16}} 
-                    title="Add propertie" 
+                    title="Adicionar projeto" 
                     onPress={startToAddPropertie} 
                     icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
                 />
