@@ -70,7 +70,7 @@ export default function Home({navigation}) {
     console.clear()
 
     async function getPropertieList(id) {
-        await api.get(`/projects/${id}/by_user`).then(({data}) => {
+        await api.get(`/projects/${id}/by_user/`).then(({data}) => {
             setPropertieList(data)
         }).catch((error) => {
             console.log(error)

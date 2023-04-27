@@ -40,6 +40,11 @@ export default function ThirdScreen({navigation}) {
             {/* Input Fields */}
             <View style={styles.cardContainer}>
                 <FileCardList 
+                    certMatricula={certMatricula}
+                    carSicar={carSicar}
+                    propertyPolygon={propertyPolygon}
+                    cCIR={cCIR}
+                    regularityCertificate={regularityCertificate}
                     setCertMatricula={setCertMatricula} 
                     setCarSicar={setCarSicar} 
                     setPropertyPolygon={setPropertyPolygon} 
@@ -61,7 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
-        padding: 32,
+        padding: 8,
     },
     cardContainer: {
         flex: 1,

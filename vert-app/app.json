@@ -26,16 +26,26 @@
       "usesIcloudStorage": true,
       "bundleIdentifier": "com.yourname.yourapp"
     },
-    "plugins": ["expo-document-picker"],
+    "plugins": [
+      "expo-document-picker"
+    ],
     "android": {
-      "permissions": ["android.permission.READ_EXTERNAL_STORAGE"],
+      "permissions": [
+        "android.permission.READ_EXTERNAL_STORAGE"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/leaf_animation.gif",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vert.vetecotech"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "24027ae9-7667-4ee3-ae67-7b0ec8e60a37"
+      }
     }
   }
 }
