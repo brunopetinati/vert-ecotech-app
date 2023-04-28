@@ -26,38 +26,39 @@ export default function Register({navigation}) {
         let hasErrors = false
         setFieldErrors([])
         if(fullName.length < 6) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um nome com 6 ou mais caracteres'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'O campo nome precisa ter pelo menos 6 caracteres. Por favor, tente novamente.'])
             hasErrors = true
         }
         if (email.length < 6) {
             console.log(email)
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um email com 6 caracteres ou mais'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'O endereço de e-mail que você digitou é inválido. Certifique-se de digitar um endereço de e-mail válido com pelo menos 6 caracteres.'])
             hasErrors = true
         }
         if(password.length < 6) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite uma senha com 6 ou mais caracteres'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'Sua senha precisa ter pelo menos 6 caracteres. Por favor, tente criar uma senha mais longa.'])
             hasErrors = true
         }
         if (whatsapp.length != 15) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um telefone válido'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'O número de telefone que você digitou não é válido. Por favor, digite um número de telefone válido.'])
             hasErrors = true
         }
         if(city.length < 3) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite uma cidade válida'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'Certifique-se de digitar o nome de uma cidade válida. Tente novamente, por favor.'])
             hasErrors = true
         }
         if (state.length != 2) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Digite um estado válido'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'Certifique-se de digitar o nome de um estado válido. Por favor, tente novamente.'])
             hasErrors = true
         }
         if(password != confirmPassword) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Senhas diferentes, por favor reveja'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'As <negro>senhas</negro> que você digitou não são iguais. Verifique novamente e tente novamente, por favor.'])
             hasErrors = true
         }
         console.log(fieldErrors)
         return hasErrors
     }
     async function tryRegister() {
+        setLoading(true)
         await api.post('/signup/', {
             full_name: fullName,
             phone: whatsapp,
@@ -80,11 +81,12 @@ export default function Register({navigation}) {
         })
     }
     function handleRegister() {
-        setLoading(true)
         if(fieldValidator()) {
             setErrorModalVisibility(true)
             return
         }
+            setErrorModalVisibility(false)
+        
 
         tryRegister()
     }
@@ -98,7 +100,7 @@ export default function Register({navigation}) {
             { errorModalVisibility &&
             <Dialog isVisible={errorModalVisibility} onBackdropPress={() => setErrorModalVisibility(false)}>
                 <Dialog.Title titleStyle={styles.modalTitleStyle} title='Atenção!' />
-                {fieldErrors.map((item, i) => <Text h1={true} h1Style={styles.modalItemText} key={i}>- {item}</Text>)}
+                {fieldErrors.map((item, i) => <Text h1={true} h1Style={styles.modalItemText} key={i}>• {item}</Text>)}
             </Dialog>
             }
             

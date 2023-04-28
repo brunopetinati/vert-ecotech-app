@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { useState } from "react"
 import * as DocumentPicker from 'expo-document-picker'
 import { Width } from "../../constants/dimensions"
+import mime from 'react-native-mime-types'
 
 export default function CardArquivo({ 
   certMatricula,
@@ -17,39 +18,64 @@ export default function CardArquivo({
   setCCIR, 
   setRegularityCertificate,
 }) {
+  
   async function selectFile(fileType) {
     let file = null
     switch (fileType) {
-      case 'certidão de matricula':
-        file = await docPicker()
+      case 'Certidão de matricula':
+        file = await docPicker('pdf')
         setCertMatricula(file)
         break
       case 'PDF do CAR(SICAR)':
-        file = await docPicker()
+        file = await docPicker('pdf')
         setCarSicar(file)
         break
-      case 'polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)':
+      case 'Polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)':
         file = await docPicker()
         setPropertyPolygon(file)
         break
-      case 'cópia do CCIR':
-        file = await docPicker()
+      case 'Cópia do CCIR':
+        file = await docPicker('pdf')
         setCCIR(file)
         break
-      case 'certidão de regularidade da dívida federal':
-        file = await docPicker()
+      case 'Certidão de regularidade da dívida federal':
+        file = await docPicker('pdf')
         setRegularityCertificate(file)
         break
       default:
         console.log(file)
+        console.log(fileType)
         break
     }
   }
 
-  async function docPicker() {
-    const response = await DocumentPicker.getDocumentAsync({})
-    console.log(response)
-    return response
+  async function docPicker(docType) {
+    // type: "image/*" // all images files
+    // type: "audio/*" // all audio files
+    // type: "application/*" // for pdf, doc and docx
+    // type: "application/msword" // .doc
+    // type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" // .docx
+    // type: "vnd.ms-excel" // .xls
+    // type: "vnd.openxmlformats-officedocument.spreadsheetml.sheet" // .xlsx
+    // type: "text/csv" // .csv
+    // "application/vnd.google-earth.kml+xml"
+    // "application/vnd.google-earth.kmz"
+
+    if(docType == "pdf") {
+      const response = await DocumentPicker.getDocumentAsync({
+        type: "application/pdf" // .pdf
+      })
+
+      return response
+    } 
+    else {
+      console.log("AAAAAAAA")
+      const response = await DocumentPicker.getDocumentAsync({}) //Só não colocar trava que vai
+      
+      console.log("AAAAAAAA")
+      console.log(response)
+      return response
+    }
   }
 
   function emptyItem(item) {
@@ -58,7 +84,7 @@ export default function CardArquivo({
         style={styles.boxCard}
         onPress={() => selectFile(item)}
       >
-        <Text style={{ fontWeight: 'bold', fontSize: 16 }}>{item.title}</Text>
+        <Text style={{ fontWeight: 'bold', fontSize: 16, marginBottom: 8 }}>{item}</Text>
 
         <View style={styles.cloudImage}>
           <Ionicons name="cloud-upload-outline" color="#00AE00" size={64} />
@@ -66,14 +92,17 @@ export default function CardArquivo({
 
         <Text style={styles.fileDescription}>Envie um arquivo</Text>
       </TouchableOpacity>
-    );
+    )
   }
   
   function filledItem(item) {
     return (
       <View style={styles.boxCardFilled}>
         <View Style={styles.docImage}>
-          <Ionicons name="document-text-outline" color="#00AE00" size={44} />
+          {item.file.uri.includes('pdf') && <Ionicons name="reader-outline" color="#00AE00" size={44} />}
+          {(item.file.uri.includes('jpeg') || item.file.uri.includes('jpg') || item.file.uri.includes('png')) && <Ionicons name="image-outline" color="#00AE00" size={44} />}
+          {(item.file.uri.includes('docx') || item.file.uri.includes('doc')) && <Ionicons name="document-text-outline" color="#00AE00" size={44} />}
+          {(item.file.uri.includes('zip') || item.file.uri.includes('zip')) && <Ionicons name="earth-outline" color="#00AE00" size={44} />}
         </View>
 
         <Text style={styles.fileDescription}>
@@ -85,7 +114,7 @@ export default function CardArquivo({
   
   const fields = [
     {
-      title: 'certidão de matricula',
+      title: 'Certidão de matricula',
       file: certMatricula,
       avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
@@ -95,17 +124,17 @@ export default function CardArquivo({
       avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
     {
-      title: 'polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)',
+      title: 'Polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)',
       file: propertyPolygon,
       avaiableFileType: ['kmz', 'kml'],
     },
     {
-      title: 'cópia do CCIR',
+      title: 'Cópia do CCIR',
       file: cCIR,
       avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
     {
-      title: 'certidão de regularidade da dívida federal',
+      title: 'Certidão de regularidade da dívida federal',
       file: regularityCertificate,
       avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
@@ -177,6 +206,6 @@ const styles = StyleSheet.create({
     }
 })
 
-//<ion-icon name="image-outline"></ion-icon> img icon
-//<ion-icon name="cube-outline"></ion-icon> kmz icon
-//<ion-icon name="reader-outline"></ion-icon> pdf icon 
+// "image-outline" img icon
+// "earth-outline" kmz icon
+// "reader-outline" pdf icon 
