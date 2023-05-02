@@ -89,7 +89,7 @@ export default function FirstScreen({navigation}) {
                     pages={[
                         {
                             backgroundColor: '#fff',
-                            image: <Image style={styles.onboardingImages} source={require('../../assets/teste_floresta.gif')} />,
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/test_drone.gif')} />,
                             title: 'Vamos iniciar um projeto! ',
                             subtitle: 'Para iniciar um projeto, é necessário realizar uma análise prévia da documentação referente à área em questão. ',
                         },
@@ -101,12 +101,10 @@ export default function FirstScreen({navigation}) {
                         },
                         {
                             backgroundColor: '#fff',
-                            image: <Image style={styles.onboardingImages} source={require('../../assets/marca-vert.png')} />,
-                            title: 'Pontapé pra criar',
-                            subtitle: 'Done with React Native Onboarding Swiper',
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/teste_floresta.gif')} />,
+                            title: 'Vamos começar',
+                            subtitle: '',
                         },
-
-                        
                     ]}
                     onSkip={() => {
                         setTutorialVisibility(false) 
