@@ -1,5 +1,5 @@
 import { Button } from "@rneui/themed";
-import { KeyboardAvoidingView, ScrollView, View, StyleSheet } from "react-native";
+import { KeyboardAvoidingView, ScrollView, View, StyleSheet, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { Masks } from 'react-native-mask-input';
 import { useEffect, useState } from "react";
@@ -7,8 +7,12 @@ import { Platform, ToastAndroid } from 'react-native'
 import VertMaskInput from "../../components/VertMaskInput";
 import api from '../../Api'
 import { getData } from '../../Storage'
+import Onboarding from 'react-native-onboarding-swiper';
 
 export default function FirstScreen({navigation}) {
+    const [projectExists, setProjectExistence] = useState(false)
+    const [isTutorialVisible, setTutorialVisibility] = useState(true)
+    // FORM
     const [userCredentials, setUserCredentials] = useState({})
     const [totalArea, setTotalArea] = useState('')
     const [totalLegalArea, setTotalLegalArea] = useState('')
@@ -24,7 +28,26 @@ export default function FirstScreen({navigation}) {
 
         getUserData()
     }, [])
+    
     function goToNextScreen() {
+        if(projectExists) {
+            console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
+        } else {
+            api.post('/projects/', {
+                owner: userCredentials.id,
+                total_area: totalArea,
+                legal_reserve_area: totalLegalArea,
+                address: propertieAddress,
+                cnpj: cpnj,
+                sicar_code: sicar,
+            }).then((response) => {
+                console.log(response)
+            }).catch((error) => {
+                console.log(error)
+                //Falar que precisa preencher certo
+            })
+        }
+
         navigation.navigate('Second')
     }
     function goToMainScreen() {
@@ -60,77 +83,118 @@ export default function FirstScreen({navigation}) {
     
     return(
         <>
-            <KeyboardAvoidingView style={styles.container}>
-                {/* Form fields */}
-                <ScrollView contentContainerStyle={styles.container}>
-                    <VertMaskInput 
-                        label="CNPJ do proprietário"
-                        value={cpnj}
-                        maxLength={100}
-                        mask={Masks.BRL_CNPJ}
-                        leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
-                        setValue={setCnpj}
-                    />
+            { isTutorialVisible && 
+                <>
+                <Onboarding 
+                    pages={[
+                        {
+                            backgroundColor: '#fff',
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/teste_floresta.gif')} />,
+                            title: 'Vamos iniciar um projeto! ',
+                            subtitle: 'Para iniciar um projeto, é necessário realizar uma análise prévia da documentação referente à área em questão. ',
+                        },
+                        {
+                            backgroundColor: '#fff',
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/documents.gif')} />,
+                            title: 'Envio de documentos ',
+                            subtitle: 'Ao enviar os dados, nosso time fará uma pré-análise para verificar o potencial de geração de créditos de carbono. O envio de mais documentos pode aumentar a precisão da avaliação. ',
+                        },
+                        {
+                            backgroundColor: '#fff',
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/marca-vert.png')} />,
+                            title: 'Pontapé pra criar',
+                            subtitle: 'Done with React Native Onboarding Swiper',
+                        },
 
-                    <VertMaskInput 
-                        label="Código SICAR"
-                        value={sicar}
-                        maxLength={150}
-                        //'99-9999999-9999.9999.9999.9999.9999.9999.9999.9999'
-                        mask={[/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '-', 
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '-',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',    
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
-                                '.',
-                                /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
-                            ]}
-                        leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
-                        setValue={setSicar}
-                    />
+                        
+                    ]}
+                    onSkip={() => {
+                        setTutorialVisibility(false) 
+                      }}
+                    skipLabel={'Pular '}
+                    nextLabel={'Próximo '}
+                    onDone={() =>{
+                        setTutorialVisibility(false) 
+                    }}
+                /> 
+                </>
+            }
 
-                    <VertMaskInput 
-                        label="Área total da propriedade (ha)"
-                        keyboardType="numeric"
-                        value={totalArea}
-                        maxLength={20}
-                        leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
-                        setValue={setTotalArea}
-                    />
-                    <VertMaskInput 
-                        label="Área total da reserva legal (ha)"
-                        keyboardType="numeric"
-                        value={totalLegalArea}
-                        maxLength={20}
-                        leftIcon={<Ionicons color='#00AE00' size={20} name="expand-outline" />}
-                        setValue={setTotalLegalArea}
-                    />
-                    <VertMaskInput 
-                        label="Endereço da propriedade"
-                        value={propertieAddress}
-                        maxLength={120}
-                        leftIcon={<Ionicons color='#00AE00' size={20} name="map-outline" />}
-                        setValue={setPropertieAddress}
-                    />
-                    {/* Button Area */}
-                    <View>
-                        <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
-                        <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
-                    </View>
-                </ScrollView>   
-            </KeyboardAvoidingView>
+
+
+            {!isTutorialVisible && <>
+                <KeyboardAvoidingView style={styles.container}>
+                    {/* Form fields */}
+                    <ScrollView contentContainerStyle={styles.container}>
+                        <VertMaskInput 
+                            label="CNPJ do proprietário"
+                            value={cpnj}
+                            maxLength={100}
+                            mask={Masks.BRL_CNPJ}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
+                            setValue={setCnpj}
+                        />
+
+                        <VertMaskInput 
+                            label="Código SICAR"
+                            value={sicar}
+                            maxLength={150}
+                            //'99-9999999-9999.9999.9999.9999.9999.9999.9999.9999'
+                            mask={[/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '-', 
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '-',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',    
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,/[a-zA-Z0-9]/, /[a-zA-Z0-9]/, 
+                                    '.',
+                                    /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/, /[a-zA-Z0-9]/,
+                                ]}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
+                            setValue={setSicar}
+                        />
+
+                        <VertMaskInput 
+                            label="Área total da propriedade (ha)"
+                            keyboardType="numeric"
+                            value={totalArea}
+                            maxLength={20}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
+                            setValue={setTotalArea}
+                        />
+                        <VertMaskInput 
+                            label="Área total da reserva legal (ha)"
+                            keyboardType="numeric"
+                            value={totalLegalArea}
+                            maxLength={20}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="expand-outline" />}
+                            setValue={setTotalLegalArea}
+                        />
+                        <VertMaskInput 
+                            label="Endereço da propriedade"
+                            value={propertieAddress}
+                            maxLength={120}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="map-outline" />}
+                            setValue={setPropertieAddress}
+                        />
+                        {/* Button Area */}
+                        <View>
+                            <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
+                            <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                        </View>
+                    </ScrollView>   
+                </KeyboardAvoidingView>
+            </>}
         </>
     )
 }
@@ -141,5 +205,9 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: Platform.OS === 'ios' ? 16 : 20,
+    },
+    onboardingImages: {
+        width: '75%',
+        height: 256
     },
 })
