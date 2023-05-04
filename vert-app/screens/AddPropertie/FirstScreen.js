@@ -1,4 +1,4 @@
-import { Button } from "@rneui/themed";
+import { Button, Text } from "@rneui/themed";
 import { KeyboardAvoidingView, ScrollView, View, StyleSheet, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { Masks } from 'react-native-mask-input';
@@ -25,57 +25,56 @@ export default function FirstScreen({navigation}) {
             const userData = JSON.parse(await getData('userCredentials'))
             setUserCredentials(userData)
         }
-
+        validateFields()
         getUserData()
     }, [])
     
+    function validateFields() {
+        console.log(sicar.length)
+        if (sicar.length != 50) {
+            
+        }
+        if (propertieAddress < 10) {
+
+        }
+        if (totalArea.length < 4) {
+            
+        }
+    }
     function goToNextScreen() {
         if(projectExists) {
             console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
         } else {
-            api.post('/projects/', {
-                owner: userCredentials.id,
-                total_area: totalArea,
-                legal_reserve_area: totalLegalArea,
-                address: propertieAddress,
-                cnpj: cpnj,
-                sicar_code: sicar,
-            }).then((response) => {
-                console.log(response)
-            }).catch((error) => {
-                console.log(error)
-                //Falar que precisa preencher certo
-            })
+            if (validateFields()) {
+                createProject()
+            }
         }
-
-        navigation.navigate('Second')
     }
     function goToMainScreen() {
         navigation.pop()
     }
     async function createProject() {
-        api.post('/projects/', {
+        await api.post('/projects/', {
+            owner: userCredentials.id,
+            total_area: totalArea,
+            legal_reserve_area: totalLegalArea,
+            address: propertieAddress,
             cnpj: cpnj,
             sicar_code: sicar,
-            address: propertieAddress,
-            legal_reserve_area: totalLegalArea,
-            owner: userCredentials.id,
-            reserve_legal_status: totalLegalArea,
-            total_area: totalArea,
-        }).then((response) => {
-
+        }).then(({data}) => {
+            console.log(data)
+            navigation.navigate('Second', {projectId: data.id})
         }).catch((error) => {
-
+            console.log(error)
+            //Falar que precisa preencher certo
         })
     }
     async function saveAndContinueLater() {
+        createProject()
         goToMainScreen()
+
         if(Platform.OS == 'android') {
-            ToastAndroid.showWithGravity(
-                'Projeto salvo com sucesso',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-            )
+            ToastAndroid.showWithGravity('Projeto salvo com sucesso', ToastAndroid.SHORT, ToastAndroid.CENTER,)
         } else {
             
         }
@@ -102,23 +101,21 @@ export default function FirstScreen({navigation}) {
                         {
                             backgroundColor: '#fff',
                             image: <Image style={styles.onboardingImages} source={require('../../assets/teste_floresta.gif')} />,
-                            title: 'Vamos começar',
+                            title: <Text style={{fontSize: 32}}>Vamos começar</Text>,
                             subtitle: '',
                         },
                     ]}
                     onSkip={() => {
                         setTutorialVisibility(false) 
-                      }}
-                    skipLabel={'Pular '}
-                    nextLabel={'Próximo '}
+                    }}
+                    skipLabel={<Text>Pular</Text>}
+                    nextLabel={<Text>Próximo</Text>}
                     onDone={() =>{
                         setTutorialVisibility(false) 
                     }}
                 /> 
                 </>
             }
-
-
 
             {!isTutorialVisible && <>
                 <KeyboardAvoidingView style={styles.container}>
@@ -187,7 +184,7 @@ export default function FirstScreen({navigation}) {
                         />
                         {/* Button Area */}
                         <View>
-                            <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Continuar' />
+                            <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Próximo' />
                             <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
                         </View>
                     </ScrollView>   

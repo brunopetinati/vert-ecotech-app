@@ -2,6 +2,7 @@ import { StyleSheet, ToastAndroid, View } from "react-native"
 import { Button, } from "@rneui/themed"
 import FileCardList from '../../components/FileCardList'
 import { useState } from "react"
+import api from '../../Api'
 
 export default function ThirdScreen({navigation}) {
 
@@ -21,8 +22,24 @@ export default function ThirdScreen({navigation}) {
             )
         }
     }
-    async function updateProject() {
-        goToMainScreen()
+    
+    async function updateProject(id) {
+        var formData = new FormData()
+        // Inserindo nossos arquivos para um bagui multipartForm
+        formData.append('pdf_matricula_certificate', certMatricula)
+        formData.append('pdf_car', carSicar)
+        formData.append('property_polygon', null)
+        formData.append('pdf_federal_debt_certificate', null)
+        formData.append('pdf_ccir', null)
+
+        await api.put(`/projects/${id}/update/`, formData)
+        .then((data) => {
+            goToMainScreen()
+        })
+        .catch((error) => {
+            // Mostra erros
+            
+        })
     }
     async function saveAndContinueLater() {
         goToMainScreen()
@@ -33,6 +50,9 @@ export default function ThirdScreen({navigation}) {
                 ToastAndroid.CENTER,
             )
         }
+    }
+    function finishProject() {
+        updateProject()
     }
 
     return(
@@ -54,7 +74,7 @@ export default function ThirdScreen({navigation}) {
             </View>
             {/* Button Area */}
             <View>
-                <Button onPress={updateProject} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
+                <Button onPress={finishProject} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
                 <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
             </View>
         </View>
