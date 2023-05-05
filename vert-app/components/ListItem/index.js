@@ -1,5 +1,5 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { Width } from "../../constants/dimensions";
+import { Height, Width } from "../../constants/dimensions";
 
 export default function ListItem({children}) {
     return(
@@ -11,6 +11,7 @@ export default function ListItem({children}) {
 
 const styles = StyleSheet.create({
   container: {
+    height: Height*0.2,
     width: Width*0.9,
     padding: 10,
     borderBottomWidth: 1,

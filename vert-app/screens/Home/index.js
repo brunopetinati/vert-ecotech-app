@@ -1,13 +1,12 @@
 import { Text, FAB } from "@rneui/themed"
 import { useState, useEffect, useContext } from "react"
-import { FlatList, StyleSheet, View, TouchableOpacity, Image } from "react-native"
+import { FlatList, StyleSheet, View, TouchableOpacity, Image, ToastAndroid } from "react-native"
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
 import { Ionicons } from '@expo/vector-icons'
 import { Height, Width } from "../../constants/dimensions"
 import api from '../../Api'
-import AsyncStorage from "@react-native-async-storage/async-storage"
 import { getData } from "../../Storage"
 import { Dialog } from "@rneui/base"
 import LoadingAnimation from "../../components/LoadingAnimation"
@@ -67,26 +66,34 @@ export default function Home({navigation}) {
     // ]) TESTE
     const [propertiesList, setPropertieList] = useState(null)
     const [userCredentials, setUserCredentials] = useState(null)
+    const [isLoading, setLoading] = useState(true)
+
     console.clear()
 
     async function getPropertieList(id) {
         await api.get(`/projects/${id}/by_user/`).then(({data}) => {
+            if(propertiesList != null) {
+                if (data.length > propertiesList.length) {
+                    ToastAndroid.showWithGravity('Novos projetos vieram', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+                } else {
+                    ToastAndroid.showWithGravity('Nenhuma novidade', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+                }
+            }
+
             setPropertieList(data)
+            setLoading(false)
         }).catch((error) => {
             console.log(error)
         })
     }
-
-    useEffect(() => {
-        async function getUserInfo() {
-            const userData = JSON.parse(await getData('userCredentials'))
-            setUserCredentials(userData)
-            console.log(userData.id)
-            console.log("NA HOME")
-            getPropertieList(userData.id)
-        }
-        getUserInfo()
-    }, [])
+    async function getUserInfo() {
+        const userData = JSON.parse(await getData('userCredentials'))
+        setUserCredentials(userData)
+        console.log(userData.id)
+        console.log("NA HOME")
+        getPropertieList(userData.id)
+    }
+    useEffect(() => {getUserInfo()}, [])
 
     function startToAddPropertie() {
         navigation.navigate('AddPropertie')
@@ -134,6 +141,8 @@ export default function Home({navigation}) {
                             </View>
                             <View style={styles.propertiesList}>
                                 <FlatList 
+                                    onRefresh={getUserInfo}
+                                    refreshing={false}
                                     scrollEnabled={true}
                                     data={propertiesList}
                                     keyExtractor={item => item.id}

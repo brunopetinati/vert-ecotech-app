@@ -13,6 +13,7 @@ export default function FirstScreen({navigation}) {
     const [projectExists, setProjectExistence] = useState(false)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
     // FORM
+    const [title, setTitle] = useState('')
     const [userCredentials, setUserCredentials] = useState({})
     const [totalArea, setTotalArea] = useState('')
     const [totalLegalArea, setTotalLegalArea] = useState('')
@@ -31,6 +32,9 @@ export default function FirstScreen({navigation}) {
     
     function validateFields() {
         console.log(sicar.length)
+        if (title.length < 5) {
+            
+        }
         if (sicar.length != 50) {
             
         }
@@ -40,6 +44,8 @@ export default function FirstScreen({navigation}) {
         if (totalArea.length < 4) {
             
         }
+
+        return true
     }
     function goToNextScreen() {
         if(projectExists) {
@@ -55,6 +61,7 @@ export default function FirstScreen({navigation}) {
     }
     async function createProject() {
         await api.post('/projects/', {
+            title: title,
             owner: userCredentials.id,
             total_area: totalArea,
             legal_reserve_area: totalLegalArea,
@@ -63,7 +70,7 @@ export default function FirstScreen({navigation}) {
             sicar_code: sicar,
         }).then(({data}) => {
             console.log(data)
-            navigation.navigate('Second', {projectId: data.id})
+            navigation.navigate('Second', {projectId: data.id, userCredentials: userCredentials})
         }).catch((error) => {
             console.log(error)
             //Falar que precisa preencher certo
@@ -121,6 +128,13 @@ export default function FirstScreen({navigation}) {
                 <KeyboardAvoidingView style={styles.container}>
                     {/* Form fields */}
                     <ScrollView contentContainerStyle={styles.container}>
+                    <VertMaskInput 
+                            label="Insira um título para esse projeto"
+                            value={title}
+                            maxLength={50}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="text-outline" />}
+                            setValue={setTitle}
+                        />
                         <VertMaskInput 
                             label="CNPJ do proprietário"
                             value={cpnj}

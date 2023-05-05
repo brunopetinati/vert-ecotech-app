@@ -4,8 +4,8 @@ import FileCardList from '../../components/FileCardList'
 import { useState } from "react"
 import api from '../../Api'
 
-export default function ThirdScreen({navigation}) {
-
+export default function ThirdScreen({route, navigation}) {
+    const { projectId } = route.params
     const [certMatricula, setCertMatricula] = useState(null) //aceita .pdf
     const [carSicar, setCarSicar] = useState(null) //aceita .pdf
     const [propertyPolygon, setPropertyPolygon] = useState(null) //aceita .kmz ou .kml
@@ -25,24 +25,42 @@ export default function ThirdScreen({navigation}) {
     
     async function updateProject(id) {
         var formData = new FormData()
-        // Inserindo nossos arquivos para um bagui multipartForm
-        formData.append('pdf_matricula_certificate', certMatricula)
-        formData.append('pdf_car', carSicar)
-        formData.append('property_polygon', null)
-        formData.append('pdf_federal_debt_certificate', null)
-        formData.append('pdf_ccir', null)
+        // Inserindo nossos arquivos se não forem nulls para um bagui multipartForm
+        if(certMatricula) {
+            formData.append('pdf_matricula_certificate', certMatricula)
+        }
+        if(carSicar) {
+            formData.append('pdf_car', carSicar)
+        }
+        if(propertyPolygon) {
+            formData.append('property_polygon', propertyPolygon)
+        }
+        if (regularityCertificate) {
+            formData.append('pdf_federal_debt_certificate', regularityCertificate)
+        }
+        if (cCIR) {
+            formData.append('pdf_ccir', cCIR)
+        }
 
-        await api.put(`/projects/${id}/update/`, formData)
-        .then((data) => {
-            goToMainScreen()
-        })
-        .catch((error) => {
-            // Mostra erros
-            
-        })
+        if(
+            certMatricula != null || 
+            carSicar != null ||	
+            propertyPolygon != null || 
+            regularityCertificate != null || 
+            cCIR != null
+        ) {
+            await api.put(`/projects/${id}/update/`, formData)
+            .then((data) => {
+                goToMainScreen()
+            })
+            .catch((error) => {
+                // Mostra erros
+                
+            })
+        }
     }
     async function saveAndContinueLater() {
-        goToMainScreen()
+        updateProject(projectId)
         if(Platform.OS == 'android') {
             ToastAndroid.showWithGravity(
                 'Projeto salvo com sucesso',
@@ -52,7 +70,7 @@ export default function ThirdScreen({navigation}) {
         }
     }
     function finishProject() {
-        updateProject()
+        updateProject(projectId)
     }
 
     return(

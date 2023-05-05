@@ -1,54 +1,45 @@
-import { Button, Input } from "@rneui/themed"
+import { Button } from "@rneui/themed"
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useState } from "react"
 import api from '../../Api'
-import VertMaskInput from "../../components/VertMaskInput"
-import { Masks } from "react-native-mask-input"
-import { Height } from "../../constants/dimensions"
+import { getData } from '../../Storage'
 
 export default function SecondScreen({route, navigation}) {
-    const { projectId } = route.params
+    const { userCredentials, projectId } = route.params
+    console.log(userCredentials)
     const yesOrNOt = ["Sim", "Não"]
     const regOrNot = ["Regularizada", "Não regularizada"]
     const sicStatus = ["Aprovado", "Em análise", "Cancelado", "Suspenso"]
     // Form fields
-    const [deficetLegal, setLegalDeficet] = useState()
-    const [legalReserveStatus, setLegalReserveStatus] = useState()
-    const [matriculaStatus, setMatriculaStatus] = useState()
-    const [sicarStatus, setSicarStatus] = useState()
-    const [divida, setDivida] = useState()
+    const [deficetLegal, setLegalDeficet] = useState('')
+    const [legalReserveStatus, setLegalReserveStatus] = useState('')
+    const [matriculaStatus, setMatriculaStatus] = useState('')
+    const [sicarStatus, setSicarStatus] = useState('')
+    const [divida, setDivida] = useState('')
     // conservation_unit ["privada", "pública", "não possui", "ambas"]
-
+    
     const [hasConservationArea, setConservationArea] = useState()
     const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState()
 
     async function sendProjectInfo(id) {
         //Aqui só faz update
+        console.log(`/projects/${id}/update/`)
         await api.put(`/projects/${id}/update/`, {
-            "address": "",
             status_car: sicarStatus,
             matricula_status: matriculaStatus,
             georeferencing_status: georeferenciamentoSigef,
             reserve_legal_status: legalReserveStatus,
-            "physical_or_legal_entity": "legal",
-            "conservation_unit": "",
-            "owner_actions_to_preserve_forest": "",
             legal_reserve_deficit: deficetLegal,
-            "has_federal_debt": null,
-            "pdf_matricula_certificate": null,
-            "pdf_car": null,
-            "property_polygon": null,
-            "pdf_federal_debt_certificate": null,
-            "pdf_ccir": null,
-            "owner": 2
+            owner: userCredentials.id,
         })
         .then((response) => {
-            navigation.navigate('Third', {projectId: projectId})
+            navigation.navigate('Third', {projectId: projectId, userCredentials: userCredentials})
         })
         .catch((error) => {
             // Erros na tela
+            console.log(error)
         })
     }
     function goToNextScreen() {
