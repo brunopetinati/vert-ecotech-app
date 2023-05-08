@@ -7,7 +7,9 @@ import api from '../../Api'
 import { getData } from '../../Storage'
 
 export default function SecondScreen({route, navigation}) {
-    const { userCredentials, projectId } = route.params
+
+    const { userCredentials, projectId, project } = route.params
+    console.log(project)
     console.log(userCredentials)
     const yesOrNOt = ["Sim", "Não"]
     const regOrNot = ["Regularizada", "Não regularizada"]

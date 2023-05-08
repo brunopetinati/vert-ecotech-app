@@ -68,10 +68,9 @@ export default function Home({navigation}) {
     const [userCredentials, setUserCredentials] = useState(null)
     const [isLoading, setLoading] = useState(true)
 
-    console.clear()
-
     async function getPropertieList(id) {
-        await api.get(`/projects/${id}/by_user/`).then(({data}) => {
+        await api.get(`/projects/${id}/by_user/`)
+        .then(({data}) => {
             if(propertiesList != null) {
                 if (data.length > propertiesList.length) {
                     ToastAndroid.showWithGravity('Novos projetos vieram', ToastAndroid.SHORT, ToastAndroid.CENTER,)
@@ -93,15 +92,17 @@ export default function Home({navigation}) {
         console.log("NA HOME")
         getPropertieList(userData.id)
     }
-    useEffect(() => {getUserInfo()}, [])
+    useEffect(() => { getUserInfo() }, [])
 
     function startToAddPropertie() {
         navigation.navigate('AddPropertie')
     }
 
     function openProject(project) {
-        console.log(project)
-        navigation.navigate('AddPropertie', { screen: 'First' })
+        navigation.navigate('AddPropertie', { 
+            screen: 'First', 
+            params: { project: project } 
+        })
     }
 
     function renderItem(propertie) {
@@ -110,6 +111,11 @@ export default function Home({navigation}) {
                 <TouchableOpacity onPress={() => openProject(propertie)} style={styles.container}>
                     <Text style={styles.title}>{propertie.title}</Text>
                     <Text style={styles.subtitle}>Nº: {propertie.id}</Text>
+
+                    <View style={styles.containerScore}>
+                        <Text style={styles.status}>{propertie.status ? propertie.status : 'Incompleto'}</Text>
+                        <Text style={styles.score}>score: {propertie.score ? propertie.score : '0'}</Text>
+                    </View>
                 </TouchableOpacity>
             </ListItem>
         )
@@ -182,6 +188,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     title: {
+        fontWeight: 'bold',
         fontSize: 20,
     },
     bottomArea: {
@@ -190,12 +197,30 @@ const styles = StyleSheet.create({
         width: Width,
         justifyContent: 'flex-end',
     },
-      title: {
+    title: {
         fontSize: 18,
         fontWeight: 'bold',
-      },
-      subtitle: {
+    },
+    subtitle: {
         fontSize: 14,
         color: '#666',
-      },
+    },
+    containerScore: {
+        width: '100%',
+        height: '50%',
+        flexDirection: 'row',
+        alignItems: 'flex-end', 
+        justifyContent: 'space-between',
+        marginTop: 32,
+    },
+    score: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'grey',
+    },
+    status: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'green',
+    },
 })

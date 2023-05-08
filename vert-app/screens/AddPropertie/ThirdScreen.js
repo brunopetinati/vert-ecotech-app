@@ -5,7 +5,7 @@ import { useState } from "react"
 import api from '../../Api'
 
 export default function ThirdScreen({route, navigation}) {
-    const { projectId } = route.params
+    const { projectId, project } = route.params
     const [certMatricula, setCertMatricula] = useState(null) //aceita .pdf
     const [carSicar, setCarSicar] = useState(null) //aceita .pdf
     const [propertyPolygon, setPropertyPolygon] = useState(null) //aceita .kmz ou .kml

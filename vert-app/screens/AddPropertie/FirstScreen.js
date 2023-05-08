@@ -9,7 +9,9 @@ import api from '../../Api'
 import { getData } from '../../Storage'
 import Onboarding from 'react-native-onboarding-swiper';
 
-export default function FirstScreen({navigation}) {
+export default function FirstScreen({route, navigation}) {
+    const { project } = route.params
+    console.log(project)
     const [projectExists, setProjectExistence] = useState(false)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
     // FORM
@@ -26,7 +28,9 @@ export default function FirstScreen({navigation}) {
             const userData = JSON.parse(await getData('userCredentials'))
             setUserCredentials(userData)
         }
-        validateFields()
+        if (project) {
+            setProjectExistence(true)
+        }
         getUserData()
     }, [])
     
@@ -70,11 +74,28 @@ export default function FirstScreen({navigation}) {
             sicar_code: sicar,
         }).then(({data}) => {
             console.log(data)
-            navigation.navigate('Second', {projectId: data.id, userCredentials: userCredentials})
+            navigation.navigate('Second', {projectId: data.id, userCredentials: userCredentials, project: project})
         }).catch((error) => {
             console.log(error)
             //Falar que precisa preencher certo
         })
+    }
+    async function updateProject() {
+        const response = await api.put('/projects/', {
+            title: title,
+            owner: userCredentials.id,
+            total_area: totalArea,
+            legal_reserve_area: totalLegalArea,
+            address: propertieAddress,
+            cnpj: cpnj,
+            sicar_code: sicar,
+        })
+
+        if (response.status === 200) {
+            return true
+        }
+
+        return false
     }
     async function saveAndContinueLater() {
         createProject()

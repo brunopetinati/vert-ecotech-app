@@ -11,13 +11,15 @@ export default function ListItem({children}) {
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
     height: Height*0.2,
     width: Width*0.9,
-    padding: 10,
+    padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     backgroundColor: '#fff',
     shadowColor: '#000',
+    justifyContent: 'space-between',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -25,8 +27,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
-    borderRadius: 10,
-    marginHorizontal: 10,
-    marginBottom: 10,
+    borderRadius: 16,
+    marginHorizontal: 16,
+    marginBottom: 16,
   },
 })
