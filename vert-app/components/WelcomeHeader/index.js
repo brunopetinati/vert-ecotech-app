@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Button, StyleSheet, Text, View } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import { Height, Width } from "../../constants/dimensions"
 import { Badge } from "@rneui/themed"
 
-export default function WelcomeHeader({ userName, notifications }) {
+export default function WelcomeHeader({ navigation, userName, notifications }) {
     return (
         <View style={styles.header}>
             <View style={styles.greetings}>
                 <Text style={styles.bigText}>{`Olá, ${userName.split(' ')[0]}`}</Text>
-                <Text style={styles.smallText}>Bem-vindo de volta</Text>
+                <Text style={styles.smallText}>Que bom te ver aqui</Text>
             </View>
             <View>
                 {notifications && <Badge
@@ -16,7 +16,7 @@ export default function WelcomeHeader({ userName, notifications }) {
                     value={notifications}
                     containerStyle={{ position: 'absolute', top: -10, left: 20 }}
                 />}
-                <Ionicons style={styles.notificationIcon} size={32} name="notifications-outline" color='#00AE00'/>
+                <Ionicons onPress={() => {navigation.navigate('Notifications')}} style={styles.notificationIcon} size={32} name="notifications-outline" color='#00AE00'/>
             </View>
         </View>
     )

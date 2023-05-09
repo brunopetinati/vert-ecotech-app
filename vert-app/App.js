@@ -1,4 +1,3 @@
-import { InfoProvider } from './Context'
 import { ThemeProvider, createTheme } from '@rneui/themed'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -7,6 +6,7 @@ import CarbonCreditProjects from './screens/CarbonCreditProjects'
 import Register from './screens/Register'
 import Main from './screens/Main'
 import AddPropertie from './screens/AddPropertie'
+import Notifications from './screens/Notifications'
 
 const theme = createTheme({
     lightColors: {
@@ -19,7 +19,7 @@ const theme = createTheme({
     },
     mode: 'light',
 })
-  
+
 const ParentStack = createNativeStackNavigator()
   
 export default function App() {
@@ -32,6 +32,7 @@ export default function App() {
           <ParentStack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
           <ParentStack.Screen options={{gestureEnabled: false}} name="Main" component={Main}/>
           <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
+          <ParentStack.Screen name="Notifications" component={Notifications}/>
         </ParentStack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

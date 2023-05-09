@@ -12,7 +12,6 @@ import Onboarding from 'react-native-onboarding-swiper';
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
     console.log(project)
-    const [projectExists, setProjectExistence] = useState(false)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
     // FORM
     const [title, setTitle] = useState('')
@@ -23,13 +22,24 @@ export default function FirstScreen({route, navigation}) {
     const [cpnj, setCnpj] = useState('')
     const [sicar, setSicar] = useState('')
 
+    function removeCharsCpfOrCnpj(str) {
+        return str.replace(/[./-]/g, '');
+    }
+
     useEffect(() => {
         async function getUserData() {
             const userData = JSON.parse(await getData('userCredentials'))
             setUserCredentials(userData)
         }
         if (project) {
-            setProjectExistence(true)
+            // Coloca nos inputs
+            setTitle(project.title)
+            setTotalArea(project.totalArea)
+            setCnpj(removeCharsCpfOrCnpj(project.cnpj))
+            if(Platform.OS == 'android') {
+                ToastAndroid.showWithGravity(project.cnpj, ToastAndroid.SHORT, ToastAndroid.CENTER,)
+            }
+            setSicar(project.sicar)
         }
         getUserData()
     }, [])
@@ -52,8 +62,9 @@ export default function FirstScreen({route, navigation}) {
         return true
     }
     function goToNextScreen() {
-        if(projectExists) {
+        if(project) {
             console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
+            updateProject()
         } else {
             if (validateFields()) {
                 createProject()
@@ -81,7 +92,7 @@ export default function FirstScreen({route, navigation}) {
         })
     }
     async function updateProject() {
-        const response = await api.put('/projects/', {
+        await api.put('/projects/', {
             title: title,
             owner: userCredentials.id,
             total_area: totalArea,
@@ -89,13 +100,15 @@ export default function FirstScreen({route, navigation}) {
             address: propertieAddress,
             cnpj: cpnj,
             sicar_code: sicar,
+        }).then((response) => {
+            navigation.navigate('Second')
+            ToastAndroid.showWithGravity('Informações atualizadas', ToastAndroid.LONG, ToastAndroid.CENTER,)
+        }).catch((error) => {
+            navigation.pop()
+            if(Platform.OS == 'android') {
+                ToastAndroid.showWithGravity('Erro ao salvar projeto, tente novamente mais tarde', ToastAndroid.LONG, ToastAndroid.CENTER,)
+            }
         })
-
-        if (response.status === 200) {
-            return true
-        }
-
-        return false
     }
     async function saveAndContinueLater() {
         createProject()
@@ -110,7 +123,7 @@ export default function FirstScreen({route, navigation}) {
     
     return(
         <>
-            { isTutorialVisible && 
+            { !project && 
                 <>
                 <Onboarding 
                     pages={[
@@ -145,9 +158,10 @@ export default function FirstScreen({route, navigation}) {
                 </>
             }
 
-            {!isTutorialVisible && <>
+            { project && <>
                 <KeyboardAvoidingView style={styles.container}>
                     {/* Form fields */}
+                    <Text>Informações essenciais</Text>
                     <ScrollView contentContainerStyle={styles.container}>
                     <VertMaskInput 
                             label="Insira um título para esse projeto"
@@ -222,7 +236,7 @@ export default function FirstScreen({route, navigation}) {
                             <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Próximo' />
                             <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
                         </View>
-                    </ScrollView>   
+                    </ScrollView>
                 </KeyboardAvoidingView>
             </>}
         </>

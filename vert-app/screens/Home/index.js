@@ -129,7 +129,7 @@ export default function Home({navigation}) {
     } else {
         return(
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-                <WelcomeHeader userName={userCredentials.full_name} />
+                <WelcomeHeader navigation={navigation} userName={userCredentials.full_name} />
                 { propertiesList == null ?
                 <LoadingAnimation text={'Carregando seus projetos'}/>
                 :

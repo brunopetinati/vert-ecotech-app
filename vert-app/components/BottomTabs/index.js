@@ -1,8 +1,7 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import CarbonCreditProjects from '../../screens/CarbonCreditProjects'
+//import CarbonCreditProjects from '../../screens/CarbonCreditProjects'
 import Home from '../../screens/Home'
 import { Ionicons } from '@expo/vector-icons';
-import { useState } from 'react';
 
 const Tab = createBottomTabNavigator()
 
