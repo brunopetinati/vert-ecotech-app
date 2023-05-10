@@ -72,8 +72,8 @@ export default function Home({navigation}) {
         await api.get(`/projects/${id}/by_user/`)
         .then(({data}) => {
             if(propertiesList != null) {
-                if (data.length > propertiesList.length) {
-                    ToastAndroid.showWithGravity('Novos projetos vieram', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+                if (data.length != propertiesList.length) {
+                    ToastAndroid.showWithGravity('Atualizado', ToastAndroid.SHORT, ToastAndroid.CENTER,)
                 } else {
                     ToastAndroid.showWithGravity('Nenhuma novidade', ToastAndroid.SHORT, ToastAndroid.CENTER,)
                 }

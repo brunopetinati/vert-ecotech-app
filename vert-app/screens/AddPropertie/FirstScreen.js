@@ -11,8 +11,38 @@ import Onboarding from 'react-native-onboarding-swiper';
 
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
+    console.clear()
     console.log(project)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
+    const states = [
+        'AC',
+        'AL',
+        'AP',
+        'AM',
+        'BA',
+        'CE',
+        'DF',
+        'ES',
+        'GO',
+        'MA',
+        'MT',
+        'MS',
+        'MG',
+        'PA',
+        'PB',
+        'PR',
+        'PE',
+        'PI',
+        'RJ',
+        'RN',
+        'RS',
+        'RO',
+        'RR',
+        'SC',
+        'SP',
+        'SE',
+        'TO',
+    ]
     // FORM
     const [title, setTitle] = useState('')
     const [userCredentials, setUserCredentials] = useState({})
@@ -22,6 +52,11 @@ export default function FirstScreen({route, navigation}) {
     const [cpnj, setCnpj] = useState('')
     const [sicar, setSicar] = useState('')
 
+    useEffect(() =>
+        navigation.addListener('beforeRemove', (e) => { 
+            e.preventDefault() 
+        })
+    )
     function removeCharsCpfOrCnpj(str) {
         return str.replace(/[./-]/g, '');
     }
@@ -31,15 +66,16 @@ export default function FirstScreen({route, navigation}) {
             const userData = JSON.parse(await getData('userCredentials'))
             setUserCredentials(userData)
         }
-        if (project) {
+        if (project !== undefined) {
             // Coloca nos inputs
+            setTutorialVisibility(false)
             setTitle(project.title)
-            setTotalArea(project.totalArea)
+            setTotalArea(project.total_area.toString())
+            setTotalLegalArea(project.legal_reserve_area.toString())
             setCnpj(removeCharsCpfOrCnpj(project.cnpj))
-            if(Platform.OS == 'android') {
-                ToastAndroid.showWithGravity(project.cnpj, ToastAndroid.SHORT, ToastAndroid.CENTER,)
-            }
-            setSicar(project.sicar)
+            setSicar(removeCharsCpfOrCnpj(project.sicar_code))
+            setPropertieAddress(project.address)
+            
         }
         getUserData()
     }, [])
@@ -62,7 +98,7 @@ export default function FirstScreen({route, navigation}) {
         return true
     }
     function goToNextScreen() {
-        if(project) {
+        if(project !== undefined) {
             console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
             updateProject()
         } else {
@@ -72,7 +108,7 @@ export default function FirstScreen({route, navigation}) {
         }
     }
     function goToMainScreen() {
-        navigation.pop()
+        navigation.navigate('Home')
     }
     async function createProject() {
         await api.post('/projects/', {
@@ -101,29 +137,36 @@ export default function FirstScreen({route, navigation}) {
             cnpj: cpnj,
             sicar_code: sicar,
         }).then((response) => {
+            console.log("PROXIMAA")
             navigation.navigate('Second')
             ToastAndroid.showWithGravity('Informações atualizadas', ToastAndroid.LONG, ToastAndroid.CENTER,)
         }).catch((error) => {
-            navigation.pop()
+            console.log(error)
+            navigation.navigate('Home')
             if(Platform.OS == 'android') {
                 ToastAndroid.showWithGravity('Erro ao salvar projeto, tente novamente mais tarde', ToastAndroid.LONG, ToastAndroid.CENTER,)
             }
         })
     }
     async function saveAndContinueLater() {
-        createProject()
-        goToMainScreen()
-
-        if(Platform.OS == 'android') {
-            ToastAndroid.showWithGravity('Projeto salvo com sucesso', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+        if(title != '' && totalArea != '' && totalLegalArea != '') {
+            createProject()
+            goToMainScreen()
+    
+            if(Platform.OS == 'android') {
+                ToastAndroid.showWithGravity('Projeto salvo com sucesso', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+            }
         } else {
-            
+            navigation.navigate('Home')
+            if(Platform.OS == 'android') {
+                ToastAndroid.showWithGravity('Continue seu projeto com mais calma outra hora', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+            }
         }
     }
     
     return(
         <>
-            { !project && 
+            { isTutorialVisible && 
                 <>
                 <Onboarding 
                     pages={[
@@ -152,16 +195,16 @@ export default function FirstScreen({route, navigation}) {
                     skipLabel={<Text>Pular</Text>}
                     nextLabel={<Text>Próximo</Text>}
                     onDone={() =>{
+                        console.log("Finalizr")
                         setTutorialVisibility(false) 
                     }}
                 /> 
                 </>
             }
 
-            { project && <>
+            { !isTutorialVisible && <>
                 <KeyboardAvoidingView style={styles.container}>
                     {/* Form fields */}
-                    <Text>Informações essenciais</Text>
                     <ScrollView contentContainerStyle={styles.container}>
                     <VertMaskInput 
                             label="Insira um título para esse projeto"

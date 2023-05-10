@@ -1,7 +1,7 @@
 import { StyleSheet, ToastAndroid, View } from "react-native"
 import { Button, } from "@rneui/themed"
 import FileCardList from '../../components/FileCardList'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from '../../Api'
 
 export default function ThirdScreen({route, navigation}) {
@@ -11,6 +11,12 @@ export default function ThirdScreen({route, navigation}) {
     const [propertyPolygon, setPropertyPolygon] = useState(null) //aceita .kmz ou .kml
     const [cCIR, setCCIR] = useState(null) //aceita .pdf
     const [regularityCertificate, setRegularityCertificate] = useState(null) //aceita .pdf
+
+    useEffect(() =>
+        navigation.addListener('beforeRemove', (e) => { 
+            e.preventDefault() 
+        })
+    )
 
     function goToMainScreen() {
         navigation.navigate('Main')

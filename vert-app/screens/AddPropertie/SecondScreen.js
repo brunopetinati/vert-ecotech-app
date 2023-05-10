@@ -2,7 +2,7 @@ import { Button } from "@rneui/themed"
 import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import api from '../../Api'
 import { getData } from '../../Storage'
 
@@ -21,9 +21,14 @@ export default function SecondScreen({route, navigation}) {
     const [sicarStatus, setSicarStatus] = useState('')
     const [divida, setDivida] = useState('')
     // conservation_unit ["privada", "pública", "não possui", "ambas"]
-    
     const [hasConservationArea, setConservationArea] = useState()
     const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState()
+
+    useEffect(() =>
+        navigation.addListener('beforeRemove', (e) => { 
+            e.preventDefault() 
+        })
+    )
 
     async function sendProjectInfo(id) {
         //Aqui só faz update

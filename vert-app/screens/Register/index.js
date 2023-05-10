@@ -159,10 +159,10 @@ export default function Register({navigation}) {
                         label="estado" 
                     />
                 </ScrollView>
+                <Button onPress={handleRegister}>Cadastrar</Button>
 
             </KeyboardAvoidingView>
             
-            <Button onPress={handleRegister}>Cadastrar</Button>
             </>
             }
         </>
@@ -188,14 +188,15 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
-        padding: 32,
+        paddingVertical: 16,
+        paddingHorizontal: 32,
     },
     loginArea: {
       padding: 16,
       width: Width*0.8 
     },
     vertIcon: {
-        height: 120, // ajuste a altura de acordo com o tamanho da imagem
+        height: 64, // ajuste a altura de acordo com o tamanho da imagem
         width: '100%', // defina a largura para corresponder à largura do Input
         resizeMode: 'contain', // redimensione a imagem para caber dentro do espaço disponível
         marginTop: 16,
