@@ -1,5 +1,5 @@
-import { Button } from "@rneui/themed"
-import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, View } from "react-native"
+import { Button, Text } from "@rneui/themed"
+import { KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, ToastAndroid, View } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useEffect, useState } from "react"
@@ -9,43 +9,61 @@ import { getData } from '../../Storage'
 export default function SecondScreen({route, navigation}) {
 
     const { userCredentials, projectId, project } = route.params
+    console.clear()
     console.log(project)
-    console.log(userCredentials)
     const yesOrNOt = ["Sim", "Não"]
     const regOrNot = ["Regularizada", "Não regularizada"]
     const sicStatus = ["Aprovado", "Em análise", "Cancelado", "Suspenso"]
     // Form fields
-    const [deficetLegal, setLegalDeficet] = useState('')
-    const [legalReserveStatus, setLegalReserveStatus] = useState('')
+    const [deficetLegal, setLegalDeficet] = useState(false)
+    const [legalReserveStatus, setLegalReserveStatus] = useState(false)
     const [matriculaStatus, setMatriculaStatus] = useState('')
     const [sicarStatus, setSicarStatus] = useState('')
-    const [divida, setDivida] = useState('')
+    const [ divida, setDivida] = useState(false)
     // conservation_unit ["privada", "pública", "não possui", "ambas"]
-    const [hasConservationArea, setConservationArea] = useState()
-    const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState()
+    const [hasConservationArea, setConservationArea] = useState(false)
+    const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState('')
 
-    useEffect(() =>
-        navigation.addListener('beforeRemove', (e) => { 
-            e.preventDefault() 
-        })
-    )
+    useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
+    useEffect(() => {
+        if (project != undefined) {
+            setDivida(project.has_federal_debt)
+            setConservationArea(project.conservation_unit)
+            setLegalDeficet(project.legal_reserve_deficit)
+            setLegalReserveStatus(project.reserve_legal_status)
+            setMatriculaStatus(project.matricula_status)
+            setSicarStatus(project.status_car)
+            setgeoreferenciamentoSigef(project.georeferencing_status)
+        }
+    }, [])
 
+    function makeToast(message) {
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(
+                message,
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+            )
+        }
+    }
     async function sendProjectInfo(id) {
         //Aqui só faz update
-        console.log(`/projects/${id}/update/`)
         await api.put(`/projects/${id}/update/`, {
             status_car: sicarStatus,
             matricula_status: matriculaStatus,
             georeferencing_status: georeferenciamentoSigef,
             reserve_legal_status: legalReserveStatus,
             legal_reserve_deficit: deficetLegal,
+            has_federal_debt: divida,
             owner: userCredentials.id,
         })
         .then((response) => {
-            navigation.navigate('Third', {projectId: projectId, userCredentials: userCredentials})
+            makeToast('Informações salvas')
+            navigation.navigate('Third', {projectId: projectId, userCredentials: userCredentials, project: project})
         })
         .catch((error) => {
             // Erros na tela
+            makeToast('Tente novamente mais tarde')
             console.log(error)
         })
     }
@@ -57,15 +75,15 @@ export default function SecondScreen({route, navigation}) {
     }
     async function saveAndContinueLater() {
         goToMainScreen()
-        if(Platform.OS == 'android') {
-            ToastAndroid.showWithGravity(
-                'Projeto salvo com sucesso',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-            )
-        }
+        makeToast('Projeto salvo com sucesso')
     }
+    function trueOrFalse(yesOrNOt) {
+        if (yesOrNOt == 'Sim') {
+            return true
+        }
 
+        return false
+    }
     return(
         <>
             <KeyboardAvoidingView style={styles.container}>
@@ -73,7 +91,9 @@ export default function SecondScreen({route, navigation}) {
                 <ScrollView contentContainerStyle={styles.internContainer}>
                     {/* STATUS DO SICAR */}
                     <View>
+                        <Text>Status do CAR</Text>
                         <SelectDropdown 
+                            defaultValue={sicarStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -97,7 +117,9 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* DEFICIT LEGAL */}
                     <View>
+                        <Text>Possui déficit de reserva legal?</Text>
                         <SelectDropdown 
+                            defaultValue={deficetLegal}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -105,8 +127,8 @@ export default function SecondScreen({route, navigation}) {
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
-                                setLegalDeficet(selectedItem)
-                                console.log(selectedItem, index)
+
+                                setLegalDeficet(trueOrFalse(selectedItem))
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
@@ -122,15 +144,17 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* TEM DÍVIDA? */}
                     <View>
+                        <Text>Possui dívida federal?</Text>
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
+                            defaultValue={divida}
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Possui dívida federal?"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
-                                setDivida(selectedItem)
+                                setDivida(trueOrFalse(selectedItem))
                                 console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
@@ -147,7 +171,9 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* STATUS DA MATRICULA */}
                     <View>
+                        <Text>Status da matrícula do imóvel</Text>
                         <SelectDropdown 
+                            defaultValue={matriculaStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -172,7 +198,9 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* GEOREFERENCIAMENTO NO SIGEF */}
                     <View>
+                        <Text>Georeferenciamento no SIGEF</Text>
                         <SelectDropdown 
+                            defaultValue={georeferenciamentoSigef}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -197,7 +225,9 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* SITUAÇÃO DA RESERVA LEGAL */}
                     <View>
+                        <Text>Situação da reserva legal</Text>
                         <SelectDropdown 
+                            defaultValue={legalReserveStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -222,7 +252,9 @@ export default function SecondScreen({route, navigation}) {
                     </View>
                     {/* POSSUI UNIDADE DE CONSERVAÇÃO */}
                     <View>
+                        <Text>Possui unidade de consevação?</Text>
                         <SelectDropdown 
+                            defaultValue={hasConservationArea}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
@@ -230,7 +262,7 @@ export default function SecondScreen({route, navigation}) {
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
-                                setConservationArea(selectedItem)
+                                setConservationArea(trueOrFalse(selectedItem))
                                 console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {

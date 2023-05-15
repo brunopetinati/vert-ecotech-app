@@ -12,14 +12,10 @@ export default function ThirdScreen({route, navigation}) {
     const [cCIR, setCCIR] = useState(null) //aceita .pdf
     const [regularityCertificate, setRegularityCertificate] = useState(null) //aceita .pdf
 
-    useEffect(() =>
-        navigation.addListener('beforeRemove', (e) => { 
-            e.preventDefault() 
-        })
-    )
+    useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
 
     function goToMainScreen() {
-        navigation.navigate('Main')
+        navigation.navigate('Home')
         if(Platform.OS == 'android') {
             ToastAndroid.showWithGravity(
                 'Projeto salvo com sucesso',
@@ -55,6 +51,7 @@ export default function ThirdScreen({route, navigation}) {
             regularityCertificate != null || 
             cCIR != null
         ) {
+            formData.append('owner', project.owner)
             await api.put(`/projects/${id}/update/`, formData)
             .then((data) => {
                 goToMainScreen()

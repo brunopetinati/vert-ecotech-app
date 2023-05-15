@@ -100,7 +100,7 @@ export default function FirstScreen({route, navigation}) {
     function goToNextScreen() {
         if(project !== undefined) {
             console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
-            updateProject()
+            updateProject(project.id)
         } else {
             if (validateFields()) {
                 createProject()
@@ -127,21 +127,22 @@ export default function FirstScreen({route, navigation}) {
             //Falar que precisa preencher certo
         })
     }
-    async function updateProject() {
-        await api.put('/projects/', {
+    async function updateProject(id) {
+        await api.put(`/projects/${id}/update/`, {
             title: title,
-            owner: userCredentials.id,
-            total_area: totalArea,
-            legal_reserve_area: totalLegalArea,
+            owner: project.owner,
+            total_area: parseFloat(totalArea),
+            legal_reserve_area: parseFloat(totalLegalArea),
             address: propertieAddress,
             cnpj: cpnj,
             sicar_code: sicar,
         }).then((response) => {
             console.log("PROXIMAA")
-            navigation.navigate('Second')
+            navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
             ToastAndroid.showWithGravity('Informações atualizadas', ToastAndroid.LONG, ToastAndroid.CENTER,)
         }).catch((error) => {
             console.log(error)
+            console.log("DEU ERRO")
             navigation.navigate('Home')
             if(Platform.OS == 'android') {
                 ToastAndroid.showWithGravity('Erro ao salvar projeto, tente novamente mais tarde', ToastAndroid.LONG, ToastAndroid.CENTER,)
