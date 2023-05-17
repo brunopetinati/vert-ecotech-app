@@ -2,7 +2,7 @@ import { Text } from "@rneui/themed";
 import { StyleSheet, View, Image } from "react-native"
 import MaskInput from 'react-native-mask-input';
 
-export default function VertMaskInput({value, setValue, leftIcon, mask, keyboardType, label, maxLength}) {
+export default function VertMaskInput({setChanges, value, setValue, leftIcon, mask, keyboardType, label, maxLength}) {
     return(
         <View style={styles.inputContainer}>
             {label && <Text style={styles.label}>{label}</Text>}
@@ -16,7 +16,10 @@ export default function VertMaskInput({value, setValue, leftIcon, mask, keyboard
                     keyboardType={keyboardType}
                     mask={mask} 
                     value={value}
-                    onChangeText={(masked) => setValue(masked)}
+                    onChangeText={(masked) => {
+                        setChanges(true)
+                        setValue(masked)
+                    }}
                 />
             </View>
         </View>

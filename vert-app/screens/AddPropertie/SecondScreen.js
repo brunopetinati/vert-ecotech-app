@@ -4,13 +4,12 @@ import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useEffect, useState } from "react"
 import api from '../../Api'
-import { getData } from '../../Storage'
 
 export default function SecondScreen({route, navigation}) {
-
-    const { userCredentials, projectId, project } = route.params
     console.clear()
     console.log(project)
+    const { userCredentials, projectId, project } = route.params
+    // Opções
     const yesOrNOt = ["Sim", "Não"]
     const regOrNot = ["Regularizada", "Não regularizada"]
     const sicStatus = ["Aprovado", "Em análise", "Cancelado", "Suspenso"]
@@ -19,7 +18,7 @@ export default function SecondScreen({route, navigation}) {
     const [legalReserveStatus, setLegalReserveStatus] = useState(false)
     const [matriculaStatus, setMatriculaStatus] = useState('')
     const [sicarStatus, setSicarStatus] = useState('')
-    const [ divida, setDivida] = useState(false)
+    const [divida, setDivida] = useState(false)
     // conservation_unit ["privada", "pública", "não possui", "ambas"]
     const [hasConservationArea, setConservationArea] = useState(false)
     const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState('')
@@ -84,6 +83,7 @@ export default function SecondScreen({route, navigation}) {
 
         return false
     }
+
     return(
         <>
             <KeyboardAvoidingView style={styles.container}>
@@ -127,7 +127,6 @@ export default function SecondScreen({route, navigation}) {
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
-
                                 setLegalDeficet(trueOrFalse(selectedItem))
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
@@ -148,7 +147,7 @@ export default function SecondScreen({route, navigation}) {
                         <SelectDropdown 
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            defaultValue={divida}
+                            defaultValue={trueOrFalse(divida)}
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
                             defaultButtonText="Possui dívida federal?"
                             data={yesOrNOt}
@@ -262,7 +261,7 @@ export default function SecondScreen({route, navigation}) {
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
-                                setConservationArea(trueOrFalse(selectedItem))
+                                setConservationArea(selectedItem)
                                 console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {

@@ -44,6 +44,7 @@ export default function FirstScreen({route, navigation}) {
         'TO',
     ]
     // FORM
+    const [hasChanges, setChanges] = useState(false)
     const [title, setTitle] = useState('')
     const [userCredentials, setUserCredentials] = useState({})
     const [totalArea, setTotalArea] = useState('')
@@ -101,7 +102,11 @@ export default function FirstScreen({route, navigation}) {
         if(project !== undefined) {
             console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
             updateProject(project.id)
-        } else {
+        }
+        else if(!hasChanges) {
+            navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
+        } 
+        else {
             if (validateFields()) {
                 createProject()
             }
@@ -208,6 +213,7 @@ export default function FirstScreen({route, navigation}) {
                     {/* Form fields */}
                     <ScrollView contentContainerStyle={styles.container}>
                     <VertMaskInput 
+                            setChanges={setChanges}
                             label="Insira um título para esse projeto"
                             value={title}
                             maxLength={50}

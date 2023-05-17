@@ -6,6 +6,7 @@ import api from '../../Api'
 
 export default function ThirdScreen({route, navigation}) {
     const { projectId, project } = route.params
+    // FORM
     const [certMatricula, setCertMatricula] = useState(null) //aceita .pdf
     const [carSicar, setCarSicar] = useState(null) //aceita .pdf
     const [propertyPolygon, setPropertyPolygon] = useState(null) //aceita .kmz ou .kml
@@ -13,18 +14,27 @@ export default function ThirdScreen({route, navigation}) {
     const [regularityCertificate, setRegularityCertificate] = useState(null) //aceita .pdf
 
     useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
+    useEffect(() => {
+        setCertMatricula(project.pdf_matricula_certificate)
+        setCarSicar(project.pdf_car)
+        setPropertyPolygon(project.property_polygon)
+        setCCIR(project.pdf_ccir)
+        setRegularityCertificate(project.pdf_federal_debt_certificate)
+    }, [])
 
-    function goToMainScreen() {
-        navigation.navigate('Home')
+    function makeText(message) {
         if(Platform.OS == 'android') {
             ToastAndroid.showWithGravity(
-                'Projeto salvo com sucesso',
+                message,
                 ToastAndroid.SHORT,
                 ToastAndroid.CENTER,
             )
         }
     }
-    
+    function goToMainScreen() {
+        navigation.navigate('Home')
+        makeText('Projeto salvo com sucesso')
+    }
     async function updateProject(id) {
         var formData = new FormData()
         // Inserindo nossos arquivos se não forem nulls para um bagui multipartForm
@@ -44,22 +54,29 @@ export default function ThirdScreen({route, navigation}) {
             formData.append('pdf_ccir', cCIR)
         }
 
-        if(
+        if
+        (
             certMatricula != null || 
             carSicar != null ||	
             propertyPolygon != null || 
             regularityCertificate != null || 
             cCIR != null
         ) {
+            console.log(project.owner)
+            console.log(id)
             formData.append('owner', project.owner)
+            
             await api.put(`/projects/${id}/update/`, formData)
             .then((data) => {
                 goToMainScreen()
             })
             .catch((error) => {
                 // Mostra erros
-                
+                console.table(error)
+                makeText('Tente novamente mais tarde')
             })
+        } else {
+            console.log('IHUHAIHSIDASHIDS')
         }
     }
     async function saveAndContinueLater() {

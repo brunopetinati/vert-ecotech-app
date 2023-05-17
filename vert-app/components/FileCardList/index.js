@@ -2,9 +2,9 @@ import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity } from "reac
 import { Text } from '@rneui/themed'
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from "react"
+import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker'
 import { Width } from "../../constants/dimensions"
-import mime from 'react-native-mime-types'
 
 export default function CardArquivo({ 
   certMatricula,
@@ -65,6 +65,14 @@ export default function CardArquivo({
       const response = await DocumentPicker.getDocumentAsync({
         type: "application/pdf" // .pdf
       })
+      const fileData = await FileSystem.readAsStringAsync(result.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      })
+      
+      console.log('ARQUIVO')
+      console.log(response)
+      console.log(fileData)
+      console.log('++++++++++++++++++++++++++++')
 
       return response
     } 
@@ -79,6 +87,9 @@ export default function CardArquivo({
   }
 
   function emptyItem(item) {
+    console.log('VAZIO')
+    console.log(item)
+    console.log('--------------------------------')
     return (
       <TouchableOpacity
         style={styles.boxCard}
@@ -96,17 +107,21 @@ export default function CardArquivo({
   }
   
   function filledItem(item) {
+    console.log('PREENCHIDO')
+    console.log(item)
+    console.log('----------------------------------------------')
     return (
       <View style={styles.boxCardFilled}>
         <View Style={styles.docImage}>
           {item.file.uri.includes('pdf') && <Ionicons name="reader-outline" color="#00AE00" size={44} />}
-          {(item.file.uri.includes('jpeg') || item.file.uri.includes('jpg') || item.file.uri.includes('png')) && <Ionicons name="image-outline" color="#00AE00" size={44} />}
-          {(item.file.uri.includes('docx') || item.file.uri.includes('doc')) && <Ionicons name="document-text-outline" color="#00AE00" size={44} />}
-          {(item.file.uri.includes('zip') || item.file.uri.includes('zip')) && <Ionicons name="earth-outline" color="#00AE00" size={44} />}
+          {(item.file.uri.includes('zip')) && <Ionicons name="earth-outline" color="#00AE00" size={44} />}
         </View>
 
         <Text style={styles.fileDescription}>
-          {item.file.name.substr(0, 16) + '...'}
+          { (item.file.name.length > 16) 
+            ? item.file.name.substr(0, 16) + '...'
+            : item.file.name
+          }
         </Text>
       </View>
     )
@@ -116,27 +131,22 @@ export default function CardArquivo({
     {
       title: 'Certidão de matricula',
       file: certMatricula,
-      avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
     {
       title: 'PDF do CAR(SICAR)',
       file: carSicar,
-      avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
     {
       title: 'Polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)',
       file: propertyPolygon,
-      avaiableFileType: ['kmz', 'kml'],
     },
     {
       title: 'Cópia do CCIR',
       file: cCIR,
-      avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
     {
       title: 'Certidão de regularidade da dívida federal',
       file: regularityCertificate,
-      avaiableFileType: ['pdf', 'jpeg', 'png', 'jpg'],
     },
   ]
   
