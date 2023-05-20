@@ -1,8 +1,7 @@
 import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity } from "react-native"
 import { Text } from '@rneui/themed'
+import * as FileSystem from 'expo-file-system'
 import { Ionicons } from '@expo/vector-icons'
-import { useState } from "react"
-import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker'
 import { Width } from "../../constants/dimensions"
 
@@ -63,11 +62,9 @@ export default function CardArquivo({
 
     if(docType == "pdf") {
       const response = await DocumentPicker.getDocumentAsync({
-        type: "application/pdf" // .pdf
+        type: "application/pdf", // .pdf
       })
-      const fileData = await FileSystem.readAsStringAsync(result.uri, {
-        encoding: FileSystem.EncodingType.Base64,
-      })
+      const fileData = await FileSystem.readAsStringAsync(response.uri)
       
       console.log('ARQUIVO')
       console.log(response)
@@ -79,9 +76,13 @@ export default function CardArquivo({
     else {
       console.log("AAAAAAAA")
       const response = await DocumentPicker.getDocumentAsync({}) //Só não colocar trava que vai
+      const fileData = await FileSystem.readAsStringAsync(response.uri)
       
-      console.log("AAAAAAAA")
+      console.log('ARQUIVO')
       console.log(response)
+      console.log(fileData)
+      console.log('++++++++++++++++++++++++++++')
+
       return response
     }
   }

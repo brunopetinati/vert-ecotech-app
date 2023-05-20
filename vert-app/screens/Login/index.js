@@ -3,13 +3,18 @@ import { Button, Input, Text } from '@rneui/themed'
 import { Width } from "../../constants/dimensions"
 import { Ionicons } from '@expo/vector-icons'
 import api from '../../Api'
-import { useState, useContext, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { getData, storeData } from '../../Storage'
+import * as Permissions from 'expo-permissions';
 import LoadingAnimation from "../../components/LoadingAnimation"
 import PlantaLoading from '../../assets/leaf_animation.gif'
 import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
+import * as MediaLibrary from 'expo-media-library'
 
 export default function Login({navigation}) {
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
+  console.log(permissionResponse)
+
   const [isLoading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -38,6 +43,7 @@ export default function Login({navigation}) {
       setPasswordError("Revise a senha informada")
       setLoading(false)
     })
+    
     cleanLoginData()
   }
 
@@ -62,15 +68,22 @@ export default function Login({navigation}) {
   }
 
   async function askPermissions() {
-    if(Platform.OS == 'android') {
-      console.log("TO NUM ANDROID")
-      askAndroidPermission()
-    }
+    const permssions = await MediaLibrary.getPermissionsAsync()
+    const hasAsked = await MediaLibrary.requestPermissionsAsync()
+    console.log(hasAsked)
+    console.log(permssions)
+    // if(Platform.OS == 'android') {
+    //   console.log("TO NUM ANDROID")
+    //   askAndroidPermission()
+    // }
   }
   useEffect(() => {
+    
     askPermissions()
 
     async function fetchData() {
+      const permissions = await requestPermission()
+      console.log(permissionResponse)
       const data = JSON.parse(await getData('userCredentials'))
       if(data != null) {
         setEmail(data.email)
@@ -124,7 +137,7 @@ export default function Login({navigation}) {
               secureTextEntry={isPasswordVisible}  placeholder="senha" 
             />
 
-            <Text>Esqueceu sua senha?</Text>
+            <Text onPress={() => navigation.navigate('ForgotPassword')}>Esqueceu sua senha?</Text>
 
             <Button containerStyle={{marginVertical: 16}} onPress={handleLogin}>Login</Button>
             <Button type='outline' onPress={() => navigation.navigate('Register')}>Cadastrar</Button>

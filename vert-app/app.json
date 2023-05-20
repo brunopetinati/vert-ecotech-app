@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "vert-app",
+    "name": "Vert ecotech",
     "slug": "vert-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -11,27 +11,35 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "permissions": [
-      "READ_EXTERNAL_STORAGE",
-      "WRITE_EXTERNAL_STORAGE"
-    ],
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets."
+        "NSPhotoLibraryUsageDescription": "We need access to your photo library to pick documents",
+        "NSDocumentsFolderUsageDescription": "We need access to your documents folder to pick documents",
+        "NSCameraUsageDescription": "This app uses the camera to scan barcodes on event tickets.",
+        "NSPhotoLibraryAddUsageDescription": "This app uses the Photo Library to get documents for carbon credit analysis."
       },
       "usesIcloudStorage": true,
       "bundleIdentifier": "com.yourname.yourapp"
     },
     "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ],
       "expo-document-picker"
     ],
     "android": {
       "permissions": [
-        "android.permission.READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
       ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/leaf_animation.gif",

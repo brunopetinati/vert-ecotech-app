@@ -39,7 +39,7 @@ export default function ThirdScreen({route, navigation}) {
         var formData = new FormData()
         // Inserindo nossos arquivos se não forem nulls para um bagui multipartForm
         if(certMatricula) {
-            formData.append('pdf_matricula_certificate', certMatricula)
+            formData.append('pdf_matricula_certificate', certMatricula.formData)
         }
         if(carSicar) {
             formData.append('pdf_car', carSicar)

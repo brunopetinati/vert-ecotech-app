@@ -7,6 +7,7 @@ import Register from './screens/Register'
 import Main from './screens/Main'
 import AddPropertie from './screens/AddPropertie'
 import Notifications from './screens/Notifications'
+import ForgotPassword from './screens/ForgotPassword'
 
 const theme = createTheme({
     lightColors: {
@@ -32,6 +33,7 @@ export default function App() {
           <ParentStack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
           <ParentStack.Screen options={{gestureEnabled: false}} name="Main" component={Main}/>
           <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
+          <ParentStack.Screen name="ForgotPassword" component={ForgotPassword}/>
           <ParentStack.Screen name="Notifications" component={Notifications}/>
         </ParentStack.Navigator>
       </NavigationContainer>
