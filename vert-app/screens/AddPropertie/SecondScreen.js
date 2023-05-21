@@ -45,7 +45,8 @@ export default function SecondScreen({route, navigation}) {
             )
         }
     }
-    async function sendProjectInfo(id) {
+    async function updateProject(id) {
+        let result = false
         //Aqui só faz update
         await api.put(`/projects/${id}/update/`, {
             status_car: sicarStatus,
@@ -57,31 +58,37 @@ export default function SecondScreen({route, navigation}) {
             owner: userCredentials.id,
         })
         .then((response) => {
+            result = true
             makeToast('Informações salvas')
-            navigation.navigate('Third', {projectId: projectId, userCredentials: userCredentials, project: project})
         })
         .catch((error) => {
             // Erros na tela
             makeToast('Tente novamente mais tarde')
-            console.log(error)
         })
+
+        return result
     }
     function goToNextScreen() {
-        sendProjectInfo(projectId)
-    }
-    function goToMainScreen() {
-        navigation.navigate('Main')
-    }
-    async function saveAndContinueLater() {
-        goToMainScreen()
-        makeToast('Projeto salvo com sucesso')
-    }
-    function trueOrFalse(yesOrNOt) {
-        if (yesOrNOt == 'Sim') {
-            return true
+        if(updateProject(projectId)) {
+            navigation.navigate('Third', {projectId: projectId, userCredentials: userCredentials, project: project})
+            return
         }
 
-        return false
+        goToMainScreen()
+    }
+    function goToMainScreen() {
+        navigation.navigate('Home')
+    }
+    async function saveAndContinueLater() {
+        updateProject(projectId)
+        goToMainScreen()
+    }
+    function trueOrFalse(booleanValue) {
+        if (booleanValue) {
+            return "Sim"
+        }
+
+        return "Não"
     }
 
     return(
@@ -96,7 +103,7 @@ export default function SecondScreen({route, navigation}) {
                             defaultValue={sicarStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Status do SICAR"
                             data={sicStatus}
                             buttonStyle={{width: '100%'}}
@@ -119,10 +126,10 @@ export default function SecondScreen({route, navigation}) {
                     <View>
                         <Text>Possui déficit de reserva legal?</Text>
                         <SelectDropdown 
-                            defaultValue={deficetLegal}
+                            defaultValue={trueOrFalse(deficetLegal)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Possui déficit de reserva legal?"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
@@ -148,13 +155,12 @@ export default function SecondScreen({route, navigation}) {
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             defaultValue={trueOrFalse(divida)}
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Possui dívida federal?"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
                                 setDivida(trueOrFalse(selectedItem))
-                                console.log(selectedItem, index)
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
@@ -175,7 +181,7 @@ export default function SecondScreen({route, navigation}) {
                             defaultValue={matriculaStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Status da matrícula do imóvel"
                             data={regOrNot}
                             buttonStyle={{width: '100%'}}
@@ -202,7 +208,7 @@ export default function SecondScreen({route, navigation}) {
                             defaultValue={georeferenciamentoSigef}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Georeferenciamento no SIGEF"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
@@ -226,10 +232,10 @@ export default function SecondScreen({route, navigation}) {
                     <View>
                         <Text>Situação da reserva legal</Text>
                         <SelectDropdown 
-                            defaultValue={legalReserveStatus}
+                            defaultValue={trueOrFalse(legalReserveStatus)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Situação da reserva legal"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
@@ -253,10 +259,10 @@ export default function SecondScreen({route, navigation}) {
                     <View>
                         <Text>Possui unidade de consevação?</Text>
                         <SelectDropdown 
-                            defaultValue={hasConservationArea}
+                            defaultValue={trueOrFalse(hasConservationArea)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="information-circle-outline" />}
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                             defaultButtonText="Possui unidade de consevação?"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}

@@ -1,6 +1,6 @@
 import { Button, Dialog, Input, Text } from '@rneui/themed'
 import { useState } from 'react'
-import { StyleSheet, ScrollView, KeyboardAvoidingView, View, Image } from "react-native"
+import { StyleSheet, ScrollView, Image } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import { Width } from '../../constants/dimensions'
 import api from '../../Api'
@@ -9,6 +9,8 @@ import { Masks } from 'react-native-mask-input'
 import CadastroLoading from '../../assets/cadastro.gif'
 import LoadingAnimation from '../../components/LoadingAnimation'
 import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
+import SelectDropdown from 'react-native-select-dropdown'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export default function Register({navigation}) {
     const [isLoading, setLoading] = useState(false)
@@ -21,6 +23,8 @@ export default function Register({navigation}) {
     const [city, setCity] = useState('')
     const [state, setState] = useState('')
     const [fieldErrors, setFieldErrors] = useState([])
+
+    const estado = ["AC","AL","AP","AM","BA","CE","DF","ES","GO","MA","MT","MS","MG","PA","PB","PR","PE","PI","RJ","RN","RS","RO","RR","SC","SP","SE","TO"]
 
     function fieldValidator() {
         let hasErrors = false
@@ -90,6 +94,7 @@ export default function Register({navigation}) {
 
         tryRegister()
     }
+    console.log(state)
 
     return(
             
@@ -104,36 +109,35 @@ export default function Register({navigation}) {
             </Dialog>
             }
             
-            <KeyboardAvoidingView style={styles.loginBox}>
+            <KeyboardAwareScrollView  contentContainerStyle={ styles.loginBox }>
                 <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
-                <ScrollView contentContainerStyle={{ marginTop: 64 }}>
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='person-outline'/>}
                         maxLength={100} 
                         value={fullName} 
                         setValue={setFullName} 
-                        label="nome completo"
+                        label="Nome completo"
                     />
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='mail-outline'/>}
                         maxLength={60} 
                         value={email} 
                         setValue={setEmail} 
-                        label="email" 
+                        label="Email" 
                     />
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='key-outline'/>}
                         maxLength={30} 
                         value={password} 
                         setValue={setPassword} 
-                        label="senha" 
+                        label="Senha" 
                     />
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='key-outline'/>}
                         maxLength={30} 
                         value={confirmPassword} 
                         setValue={setConfirmPassword} 
-                        label="confirmar senha" 
+                        label="Confirmar senha" 
                     />
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='logo-whatsapp'/>}
@@ -142,26 +146,44 @@ export default function Register({navigation}) {
                         value={whatsapp} 
                         keyboardType={'numeric'}
                         setValue={setWhatsapp} 
-                        label="whatsapp" 
+                        label="Whatsapp"
+                    />
+                
+                    <SelectDropdown 
+                            dropdownIconPosition="left"
+                            statusBarTranslucent
+                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
+                            defaultButtonText="Estado"
+                            dropdownStyle={{ height: 400 }} 
+                            data={estado}
+                            buttonStyle={{width: '100%'}}
+                            onSelect={(selectedItem, index) => {
+                                setState(selectedItem)
+                                
+                            }}
+                            buttonTextAfterSelection={(selectedItem, index) => {
+                                // text represented after item is selected
+                                // if data array is an array of objects then return selectedItem.property to render after item is selected
+                                return selectedItem
+                            }}
+                            rowTextForSelection={(item, index) => {
+                                // text represented for each item in dropdown
+                                // if data array is an array of objects then return item.property to represent item in dropdown
+                                return item
+                            }}
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#00AE00' name='location-outline'/>}
-                        maxLength={30} 
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='logo-whatsapp'/>}
+                        maxLength={15} 
+                        mask={Masks.BRL_PHONE}
                         value={city} 
+                        keyboardType={'numeric'}
                         setValue={setCity} 
-                        label="cidade" 
+                        label="City"
                     />
-                    <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#00AE00' name='location-outline'/>}
-                        maxLength={2} 
-                        value={state} 
-                        setValue={setState} 
-                        label="estado" 
-                    />
-                </ScrollView>
                 <Button onPress={handleRegister}>Cadastrar</Button>
 
-            </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
             
             </>
             }
@@ -196,9 +218,9 @@ const styles = StyleSheet.create({
       width: Width*0.8 
     },
     vertIcon: {
-        height: 64, // ajuste a altura de acordo com o tamanho da imagem
-        width: '100%', // defina a largura para corresponder à largura do Input
+        height: 74, // ajuste a altura de acordo com o tamanho da imagem
+        width: Width*0.8, // defina a largura para corresponder à largura do Input
         resizeMode: 'contain', // redimensione a imagem para caber dentro do espaço disponível
-        marginTop: 16,
+        marginTop: 75,
     },
 })

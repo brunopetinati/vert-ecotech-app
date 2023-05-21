@@ -14,35 +14,7 @@ export default function FirstScreen({route, navigation}) {
     console.clear()
     console.log(project)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
-    const states = [
-        'AC',
-        'AL',
-        'AP',
-        'AM',
-        'BA',
-        'CE',
-        'DF',
-        'ES',
-        'GO',
-        'MA',
-        'MT',
-        'MS',
-        'MG',
-        'PA',
-        'PB',
-        'PR',
-        'PE',
-        'PI',
-        'RJ',
-        'RN',
-        'RS',
-        'RO',
-        'RR',
-        'SC',
-        'SP',
-        'SE',
-        'TO',
-    ]
+
     // FORM
     const [hasChanges, setChanges] = useState(false)
     const [title, setTitle] = useState('')
@@ -80,9 +52,12 @@ export default function FirstScreen({route, navigation}) {
         }
         getUserData()
     }, [])
-    
+    function makeToast(message) {
+        if(Platform.OS == 'android') {
+            ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.CENTER,)
+        }
+    }
     function validateFields() {
-        console.log(sicar.length)
         if (title.length < 5) {
             
         }
@@ -98,24 +73,11 @@ export default function FirstScreen({route, navigation}) {
 
         return true
     }
-    function goToNextScreen() {
-        if(project !== undefined) {
-            console.log("ESSE PROJETO JÁ EXISTE, TÁ PREENCHIDO")
-            updateProject(project.id)
-        }
-        else if(!hasChanges) {
-            navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
-        } 
-        else {
-            if (validateFields()) {
-                createProject()
-            }
-        }
-    }
-    function goToMainScreen() {
-        navigation.navigate('Home')
-    }
+
+    // API Requests
     async function createProject() {
+        let result = false
+
         await api.post('/projects/', {
             title: title,
             owner: userCredentials.id,
@@ -126,13 +88,17 @@ export default function FirstScreen({route, navigation}) {
             sicar_code: sicar,
         }).then(({data}) => {
             console.log(data)
-            navigation.navigate('Second', {projectId: data.id, userCredentials: userCredentials, project: project})
+            result = true
         }).catch((error) => {
             console.log(error)
-            //Falar que precisa preencher certo
+            result = false
         })
+
+        return result
     }
     async function updateProject(id) {
+        let result = false
+
         await api.put(`/projects/${id}/update/`, {
             title: title,
             owner: project.owner,
@@ -142,34 +108,61 @@ export default function FirstScreen({route, navigation}) {
             cnpj: cpnj,
             sicar_code: sicar,
         }).then((response) => {
-            console.log("PROXIMAA")
-            navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
-            ToastAndroid.showWithGravity('Informações atualizadas', ToastAndroid.LONG, ToastAndroid.CENTER,)
+            result = true
         }).catch((error) => {
-            console.log(error)
-            console.log("DEU ERRO")
-            navigation.navigate('Home')
-            if(Platform.OS == 'android') {
-                ToastAndroid.showWithGravity('Erro ao salvar projeto, tente novamente mais tarde', ToastAndroid.LONG, ToastAndroid.CENTER,)
-            }
+            result = false
         })
+
+        return result
     }
+
+    // Buttons actions
     async function saveAndContinueLater() {
-        if(title != '' && totalArea != '' && totalLegalArea != '') {
-            createProject()
-            goToMainScreen()
-    
-            if(Platform.OS == 'android') {
-                ToastAndroid.showWithGravity('Projeto salvo com sucesso', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+        if (project) {
+            if (!updateProject(project.id)) {
+                makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
+            } else {
+                makeToast('Projeto criado com sucesso, continue mais tarde para analisarmos seu projeto')
             }
         } else {
-            navigation.navigate('Home')
-            if(Platform.OS == 'android') {
-                ToastAndroid.showWithGravity('Continue seu projeto com mais calma outra hora', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+            if(title != '' && totalArea != '' && totalLegalArea != '') {
+                if (!createProject()) {
+                    makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
+                } else {
+                    makeToast('Projeto criado com sucesso, continue mais tarde para analisarmos seu projeto')
+                }
             }
         }
+
+        navigation.navigate('Home')
     }
-    
+    function goToNextScreen() {
+        if(project !== undefined) {
+            if (!updateProject(project.id)) {
+                makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
+                navigation.navigate('Home')
+
+                return
+            } else {
+                makeToast('Sincronizando')
+            }
+        }
+        else {
+            if (validateFields()) {
+                if (!createProject()) {
+                    makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
+                    navigation.navigate('Home')
+
+                    return
+                } else {
+                    makeToast('Informações')
+                }
+            }
+        }
+
+        navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
+    }
+
     return(
         <>
             { isTutorialVisible && 
@@ -259,15 +252,15 @@ export default function FirstScreen({route, navigation}) {
                         />
 
                         <VertMaskInput 
-                            label="Área total da propriedade (ha)"
+                            label="Área total da propriedade (hectares)"
                             keyboardType="numeric"
                             value={totalArea}
                             maxLength={20}
-                            leftIcon={<Ionicons color='#00AE00' size={20} name="leaf-outline" />}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="scan-outline" />}
                             setValue={setTotalArea}
                         />
                         <VertMaskInput 
-                            label="Área total da reserva legal (ha)"
+                            label="Área total da reserva legal (hectares)"
                             keyboardType="numeric"
                             value={totalLegalArea}
                             maxLength={20}

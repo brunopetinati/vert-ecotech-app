@@ -80,7 +80,8 @@ export default function ThirdScreen({route, navigation}) {
         }
     }
     async function saveAndContinueLater() {
-        updateProject(projectId)
+        //updateProject(projectId)
+        navigation.navigate('Home')
         if(Platform.OS == 'android') {
             ToastAndroid.showWithGravity(
                 'Projeto salvo com sucesso',

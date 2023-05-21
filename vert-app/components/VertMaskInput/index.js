@@ -17,7 +17,7 @@ export default function VertMaskInput({setChanges, value, setValue, leftIcon, ma
                     mask={mask} 
                     value={value}
                     onChangeText={(masked) => {
-                        setChanges(true)
+                        {setChanges != undefined && setChanges(true)}
                         setValue(masked)
                     }}
                 />

@@ -8,7 +8,7 @@ export default function WelcomeHeader({ navigation, userName, notifications }) {
         <View style={styles.header}>
             <View style={styles.greetings}>
                 <Text style={styles.bigText}>{`Olá, ${userName.split(' ')[0]}`}</Text>
-                <Text style={styles.smallText}>Que bom te ver aqui</Text>
+                <Text style={styles.smallText}>Que bom te ver aqui!</Text>
             </View>
             <View>
                 {notifications && <Badge

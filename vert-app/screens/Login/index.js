@@ -85,9 +85,9 @@ export default function Login({navigation}) {
       const permissions = await requestPermission()
       console.log(permissionResponse)
       const data = JSON.parse(await getData('userCredentials'))
-      if(data != null) {
-        setEmail(data.email)
-      }
+      // if(data != null) {
+      //   setEmail(data.email)
+      // }
     }
 
     fetchData()

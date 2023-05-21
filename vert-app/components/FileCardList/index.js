@@ -64,7 +64,7 @@ export default function CardArquivo({
       const response = await DocumentPicker.getDocumentAsync({
         type: "application/pdf", // .pdf
       })
-      const fileData = await FileSystem.readAsStringAsync(response.uri)
+      const fileData = await FileSystem.cop(response.uri)
       
       console.log('ARQUIVO')
       console.log(response)
