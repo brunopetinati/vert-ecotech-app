@@ -33,7 +33,7 @@ export default function Register({navigation}) {
             setFieldErrors(fieldErrors => [...fieldErrors, 'O campo nome precisa ter pelo menos 6 caracteres. Por favor, tente novamente.'])
             hasErrors = true
         }
-        if (email.length < 6) {
+        if (email.length >= 6 && email.includes("@")) {
             console.log(email)
             setFieldErrors(fieldErrors => [...fieldErrors, 'O endereço de e-mail que você digitou é inválido. Certifique-se de digitar um endereço de e-mail válido com pelo menos 6 caracteres.'])
             hasErrors = true
@@ -149,13 +149,14 @@ export default function Register({navigation}) {
                         label="Whatsapp"
                     />
                     <SelectDropdown 
+                        buttonTextStyle={{textAlign: 'left'}}
                         dropdownIconPosition="left"
                         statusBarTranslucent
                         renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
                         defaultButtonText="Estado"
                         dropdownStyle={{ height: 400 }} 
                         data={estado}
-                        buttonStyle={{width: '100%'}}
+                        buttonStyle={{width: '100%', backgroundColor: '#fff' }}
                         onSelect={(selectedItem, index) => {
                             setState(selectedItem)
                             
@@ -203,6 +204,8 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     loginBox: {
+        flex: 1,
+        backgroundColor: '#fff',
         alignContent: 'center',
         justifyContent: 'center',
         paddingHorizontal: 32,
@@ -212,9 +215,9 @@ const styles = StyleSheet.create({
       width: Width*0.8 
     },
     vertIcon: {
-        height: 74, // ajuste a altura de acordo com o tamanho da imagem
+        height: 100, // ajuste a altura de acordo com o tamanho da imagem
         width: Width*0.8, // defina a largura para corresponder à largura do Input
         resizeMode: 'contain', // redimensione a imagem para caber dentro do espaço disponível
-        marginTop: 75,
+        marginBottom: 32,
     },
 })

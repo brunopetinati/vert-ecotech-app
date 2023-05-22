@@ -21,7 +21,7 @@ export default function Login({navigation}) {
   const [emailError, setEmailError] = useState("")
   const [passwordError, setPasswordError] = useState("")
   const [isPasswordVisible, setPasswordVisibility] = useState(true)
-
+  const [passwordEye, setPasswordEye] = useState('eye-off-outline')
   function cleanLoginData() {
     setTimeout(() => {
       setEmailError("")
@@ -129,15 +129,17 @@ export default function Login({navigation}) {
               leftIcon={<Ionicons color='#00AE00' size={20} name="key-outline" />} 
               rightIcon={<Ionicons onPress={() => { 
                 if (isPasswordVisible) {
+                  setPasswordEye('eye-outline')
                   setPasswordVisibility(false)
                 } else {
+                  setPasswordEye('eye-off-outline')
                   setPasswordVisibility(true)
                 }
-              }} color='#00AE00' size={20} name="eye-outline" />} 
+              }} color='#00AE00' size={20} name={passwordEye} />} 
               secureTextEntry={isPasswordVisible}  placeholder="senha" 
             />
 
-            <Text onPress={() => navigation.navigate('ForgotPassword')}>Esqueceu sua senha?</Text>
+            <Text onPress={() => navigation.navigate('ForgotPassword')} style={{ fontStyle: 'italic' }}>Esqueceu sua senha?</Text>
 
             <Button containerStyle={{marginVertical: 16}} onPress={handleLogin}>Login</Button>
             <Button type='outline' onPress={() => navigation.navigate('Register')}>Cadastrar</Button>

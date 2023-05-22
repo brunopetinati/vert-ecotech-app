@@ -191,6 +191,7 @@ export default function FirstScreen({route, navigation}) {
                     onSkip={() => {
                         setTutorialVisibility(false) 
                     }}
+                    
                     skipLabel={<Text>Pular</Text>}
                     nextLabel={<Text>Próximo</Text>}
                     onDone={() =>{

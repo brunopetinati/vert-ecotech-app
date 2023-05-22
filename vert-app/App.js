@@ -34,7 +34,7 @@ export default function App() {
           <ParentStack.Screen options={{gestureEnabled: false}} name="Main" component={Main}/>
           <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
           <ParentStack.Screen options={{headerShown: true, title: "Esqueceu a senha"}} name="ForgotPassword" component={ForgotPassword}/>
-          <ParentStack.Screen name="Notifications" component={Notifications}/>
+          <ParentStack.Screen options={{headerShown: true, title: "Suas notificações"}} name="Notifications" component={Notifications}/>
         </ParentStack.Navigator>
       </NavigationContainer>
     </ThemeProvider>

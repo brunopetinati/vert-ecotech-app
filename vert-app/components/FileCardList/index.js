@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity } from "react-native"
 import { Text } from '@rneui/themed'
-import RNFS from 'react-native-fs';
+//import RNFS from 'react-native-fs';
 import { Ionicons } from '@expo/vector-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import { Width } from "../../constants/dimensions"
