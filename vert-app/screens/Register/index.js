@@ -109,7 +109,7 @@ export default function Register({navigation}) {
             </Dialog>
             }
             
-            <KeyboardAwareScrollView  contentContainerStyle={ styles.loginBox }>
+            <KeyboardAwareScrollView contentContainerStyle={ styles.loginBox }>
                 <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
                     <VertMaskInput 
                         leftIcon={<Ionicons size={20} color='#00AE00' name='person-outline'/>}
@@ -148,43 +148,39 @@ export default function Register({navigation}) {
                         setValue={setWhatsapp} 
                         label="Whatsapp"
                     />
-                
                     <SelectDropdown 
-                            dropdownIconPosition="left"
-                            statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Estado"
-                            dropdownStyle={{ height: 400 }} 
-                            data={estado}
-                            buttonStyle={{width: '100%'}}
-                            onSelect={(selectedItem, index) => {
-                                setState(selectedItem)
-                                
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                // text represented after item is selected
-                                // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                return selectedItem
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                // text represented for each item in dropdown
-                                // if data array is an array of objects then return item.property to represent item in dropdown
-                                return item
-                            }}
+                        dropdownIconPosition="left"
+                        statusBarTranslucent
+                        renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
+                        defaultButtonText="Estado"
+                        dropdownStyle={{ height: 400 }} 
+                        data={estado}
+                        buttonStyle={{width: '100%'}}
+                        onSelect={(selectedItem, index) => {
+                            setState(selectedItem)
+                            
+                        }}
+                        buttonTextAfterSelection={(selectedItem, index) => {
+                            // text represented after item is selected
+                            // if data array is an array of objects then return selectedItem.property to render after item is selected
+                            return selectedItem
+                        }}
+                        rowTextForSelection={(item, index) => {
+                            // text represented for each item in dropdown
+                            // if data array is an array of objects then return item.property to represent item in dropdown
+                            return item
+                        }}
                     />
                     <VertMaskInput 
-                        leftIcon={<Ionicons size={20} color='#00AE00' name='logo-whatsapp'/>}
-                        maxLength={15} 
-                        mask={Masks.BRL_PHONE}
+                        leftIcon={<Ionicons size={20} color='#00AE00' name='location-outline'/>}
+                        maxLength={40} 
                         value={city} 
-                        keyboardType={'numeric'}
                         setValue={setCity} 
-                        label="City"
+                        label="Cidade (endreço ou geolocalização)"
                     />
                 <Button onPress={handleRegister}>Cadastrar</Button>
 
             </KeyboardAwareScrollView>
-            
             </>
             }
         </>
@@ -207,10 +203,8 @@ const styles = StyleSheet.create({
         marginBottom: 32,
     },
     loginBox: {
-        flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
-        paddingVertical: 16,
         paddingHorizontal: 32,
     },
     loginArea: {

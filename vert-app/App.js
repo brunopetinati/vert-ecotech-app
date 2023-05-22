@@ -29,11 +29,11 @@ export default function App() {
       <NavigationContainer>
         <ParentStack.Navigator screenOptions={{ headerShown: false }}>
           <ParentStack.Screen name="Login" component={Login} />
-          <ParentStack.Screen name="Register" component={Register} />
+          <ParentStack.Screen options={{headerShown: true, title: "Cadastro"}} name="Register" component={Register} />
           <ParentStack.Screen name="CarbonCreditProjects" component={CarbonCreditProjects} />
           <ParentStack.Screen options={{gestureEnabled: false}} name="Main" component={Main}/>
           <ParentStack.Screen name="AddPropertie" component={AddPropertie}/>
-          <ParentStack.Screen name="ForgotPassword" component={ForgotPassword}/>
+          <ParentStack.Screen options={{headerShown: true, title: "Esqueceu a senha"}} name="ForgotPassword" component={ForgotPassword}/>
           <ParentStack.Screen name="Notifications" component={Notifications}/>
         </ParentStack.Navigator>
       </NavigationContainer>
