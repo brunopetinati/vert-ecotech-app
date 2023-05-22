@@ -156,7 +156,7 @@ export default function SecondScreen({route, navigation}) {
                             statusBarTranslucent
                             defaultValue={trueOrFalse(divida)}
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Possui dívida federal?"
+                            defaultButtonText="Possui dívida federal, notificação ou multa ambiental?"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%'}}
                             onSelect={(selectedItem, index) => {
@@ -286,7 +286,7 @@ export default function SecondScreen({route, navigation}) {
                 {/* Buttons Area */}
                 <View>
                     <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 8 }} title='Próximo' />
-                    <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                    <Button onPress={saveAndContinueLater} type="outline" title='Continuar mais tarde' />
                 </View>
             </KeyboardAvoidingView>
         </>

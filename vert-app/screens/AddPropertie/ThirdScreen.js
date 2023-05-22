@@ -114,7 +114,7 @@ export default function ThirdScreen({route, navigation}) {
             {/* Button Area */}
             <View>
                 <Button onPress={finishProject} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
-                <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                <Button onPress={saveAndContinueLater} type="outline" title='Continuar mais tarde' />
             </View>
         </View>
     )

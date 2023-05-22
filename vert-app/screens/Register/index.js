@@ -1,6 +1,6 @@
 import { Button, Dialog, Input, Text } from '@rneui/themed'
 import { useState } from 'react'
-import { StyleSheet, ScrollView, Image } from "react-native"
+import { StyleSheet, Platform, Image } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import { Width } from '../../constants/dimensions'
 import api from '../../Api'
@@ -51,7 +51,7 @@ export default function Register({navigation}) {
             hasErrors = true
         }
         if (state.length != 2) {
-            setFieldErrors(fieldErrors => [...fieldErrors, 'Certifique-se de digitar o nome de um estado válido. Por favor, tente novamente.'])
+            setFieldErrors(fieldErrors => [...fieldErrors, 'Certifique-se de selecionar um estado. Por favor, tente novamente.'])
             hasErrors = true
         }
         if(password != confirmPassword) {
@@ -153,7 +153,7 @@ export default function Register({navigation}) {
                         dropdownIconPosition="left"
                         statusBarTranslucent
                         renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                        defaultButtonText="Estado"
+                        defaultButtonText="Selecione um estado"
                         dropdownStyle={{ height: 400 }} 
                         data={estado}
                         buttonStyle={{width: '100%', backgroundColor: '#fff' }}
@@ -177,9 +177,10 @@ export default function Register({navigation}) {
                         maxLength={40} 
                         value={city} 
                         setValue={setCity} 
-                        label="Cidade (endreço ou geolocalização)"
+                        label="Cidade"
                     />
-                <Button onPress={handleRegister}>Cadastrar</Button>
+
+                <Button style={{ marginTop: 32 }} onPress={handleRegister}>Cadastrar</Button>
 
             </KeyboardAwareScrollView>
             </>
@@ -199,6 +200,8 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     modalTitleStyle: {
+        textAlign: 'center',
+        marginVertical: '15%',
         fontWeight: 'bold',
         fontSize: 40,
         marginBottom: 32,
@@ -215,9 +218,9 @@ const styles = StyleSheet.create({
       width: Width*0.8 
     },
     vertIcon: {
-        height: 100, // ajuste a altura de acordo com o tamanho da imagem
+        height: Platform.OS == 'ios' ? 100 : 64, // ajuste a altura de acordo com o tamanho da imagem
         width: Width*0.8, // defina a largura para corresponder à largura do Input
         resizeMode: 'contain', // redimensione a imagem para caber dentro do espaço disponível
-        marginBottom: 32,
+        marginBottom: Platform.OS == 'ios' ? 32 : 16,
     },
 })

@@ -10,6 +10,7 @@ import LoadingAnimation from "../../components/LoadingAnimation"
 import PlantaLoading from '../../assets/leaf_animation.gif'
 import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
 import * as MediaLibrary from 'expo-media-library'
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
 
 export default function Login({navigation}) {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
@@ -111,12 +112,13 @@ export default function Login({navigation}) {
     return(
       <>
       {!isLoading ?
-        <SafeAreaView style={styles.loginBox}>
+        <KeyboardAwareScrollView contentContainerStyle={styles.loginBox}>
 
           <View style={styles.loginArea}>
             <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
             <Input 
               value={email} 
+              keyboardType="email-address"
               onChangeText={setEmail} 
               errorMessage={emailError} 
               leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />} 
@@ -145,7 +147,7 @@ export default function Login({navigation}) {
             <Button type='outline' onPress={() => navigation.navigate('Register')}>Cadastrar</Button>
           </View>
 
-        </SafeAreaView>
+        </KeyboardAwareScrollView>
         : <LoadingAnimation icon={PlantaLoading} text='Entrando...'/>}
         </>
     )

@@ -23,23 +23,33 @@ export default function CardArquivo({
     switch (fileType) {
       case 'Certidão de matricula':
         file = await docPicker('pdf')
-        setCertMatricula(file)
+        if(file != false) {
+          setCertMatricula(file)
+        }
         break
       case 'PDF do CAR(SICAR)':
         file = await docPicker('pdf')
-        setCarSicar(file)
+        if(file != false) {
+          setCarSicar(file)
+        }
         break
       case 'Polígono da propriedade (Formatos aceitos: *.KMZ ou *.KML)':
         file = await docPicker()
-        setPropertyPolygon(file)
+        if(file != false) {
+          setPropertyPolygon(file)
+        }
         break
       case 'Cópia do CCIR':
         file = await docPicker('pdf')
-        setCCIR(file)
+        if(file != false) {
+          setCCIR(file)
+        }
         break
       case 'Certidão de regularidade da dívida federal':
         file = await docPicker('pdf')
-        setRegularityCertificate(file)
+        if(file != false) {
+          setRegularityCertificate(file)
+        }
         break
       default:
         console.log(file)
@@ -66,7 +76,9 @@ export default function CardArquivo({
         multiple: false,
       })
       //const fileData = await FileSystem.readAsStringAsync(response.uri)
-      
+      if(response.type == 'cancel') {
+        return false
+      }
       console.log('ARQUIVO')
       console.log(response)
       //console.log(fileData)
@@ -80,6 +92,9 @@ export default function CardArquivo({
         multiple: false,
       }) //Só não colocar trava que vai
       //const fileData = await FileSystem.readAsStringAsync(response.uri)
+      if(response.type == 'cancel') {
+        return false
+      }
       
       console.log('ARQUIVO')
       console.log(response)

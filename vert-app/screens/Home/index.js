@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end', 
         justifyContent: 'space-between',
-        marginTop: 32,
+        marginTop: '8%',
     },
     score: {
         fontSize: 16,

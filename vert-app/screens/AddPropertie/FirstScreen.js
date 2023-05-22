@@ -8,6 +8,7 @@ import VertMaskInput from "../../components/VertMaskInput";
 import api from '../../Api'
 import { getData } from '../../Storage'
 import Onboarding from 'react-native-onboarding-swiper';
+import IOSToast from '../../components/IOSTaste'
 
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
@@ -16,6 +17,8 @@ export default function FirstScreen({route, navigation}) {
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
 
     // FORM
+    const [IosToastVisible, setVisible] = useState(false)
+    const [IosToastMessage, setMessage] = useState('')
     const [hasChanges, setChanges] = useState(false)
     const [title, setTitle] = useState('')
     const [userCredentials, setUserCredentials] = useState({})
@@ -33,7 +36,10 @@ export default function FirstScreen({route, navigation}) {
     function removeCharsCpfOrCnpj(str) {
         return str.replace(/[./-]/g, '');
     }
-
+    function maskHectares(text) {
+        var hectares = parseFloat(text)
+        return ((hectares.toFixed(2)).toString())
+    }
     useEffect(() => {
         async function getUserData() {
             const userData = JSON.parse(await getData('userCredentials'))
@@ -55,23 +61,41 @@ export default function FirstScreen({route, navigation}) {
     function makeToast(message) {
         if(Platform.OS == 'android') {
             ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.CENTER,)
+            return
         }
+        setMessage(message)
+        setVisible(true)
+
+        setTimeout(() => {
+            setVisible(false)
+            console.log('IOS')
+        }, 5000)
     }
     function validateFields() {
+        let isValid = true
+
         if (title.length < 5) {
             
+
+            isValid = false    
         }
         if (sicar.length != 50) {
             
-        }
-        if (propertieAddress < 10) {
 
+            isValid = false    
+        }
+        if (propertieAddress.length < 10) {
+            
+
+            isValid = false
         }
         if (totalArea.length < 4) {
             
+
+            isValid = false
         }
 
-        return true
+        return isValid
     }
 
     // API Requests
@@ -118,11 +142,11 @@ export default function FirstScreen({route, navigation}) {
 
     // Buttons actions
     async function saveAndContinueLater() {
-        if (project) {
+        if (project != undefined) {
             if (!updateProject(project.id)) {
                 makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
             } else {
-                makeToast('Projeto criado com sucesso, continue mais tarde para analisarmos seu projeto')
+                makeToast('Projeto atualizado')
             }
         } else {
             if(title != '' && totalArea != '' && totalLegalArea != '') {
@@ -131,13 +155,15 @@ export default function FirstScreen({route, navigation}) {
                 } else {
                     makeToast('Projeto criado com sucesso, continue mais tarde para analisarmos seu projeto')
                 }
+            } else {
+                makeToast('Continue seu projeto com mais calma outra hora')
             }
         }
 
-        navigation.navigate('Home')
+        //navigation.navigate('Home')
     }
     function goToNextScreen() {
-        if(project !== undefined) {
+        if(project != undefined) {
             if (!updateProject(project.id)) {
                 makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
                 navigation.navigate('Home')
@@ -157,6 +183,9 @@ export default function FirstScreen({route, navigation}) {
                 } else {
                     makeToast('Informações')
                 }
+            } else {
+                makeToast('Revise suas informações')
+                return
             }
         }
 
@@ -183,6 +212,12 @@ export default function FirstScreen({route, navigation}) {
                         },
                         {
                             backgroundColor: '#fff',
+                            image: <Image style={styles.onboardingImages} source={require('../../assets/documents.gif')} />,
+                            title: 'Documentos obrigatórios ',
+                            subtitle: <Text style={{fontSize: 16, paddingHorizontal: 16}}>{'É importante citar que nosso time só conseguirá analisar um projeto com no mínimo os seguintes dados:\n\n CAR(SICAR) \n Polígono da propriedade (KML/KMZ) \n cópia do CCIR \n\n Lembrando que quanto mais informções, mais precisa será a análise por parte de nosso time.'}</Text>,
+                        },
+                        {
+                            backgroundColor: '#fff',
                             image: <Image style={styles.onboardingImages} source={require('../../assets/teste_floresta.gif')} />,
                             title: <Text style={{fontSize: 32}}>Vamos começar</Text>,
                             subtitle: '',
@@ -201,7 +236,7 @@ export default function FirstScreen({route, navigation}) {
                 /> 
                 </>
             }
-
+            {IosToastVisible && <IOSToast message={IosToastMessage} />}
             { !isTutorialVisible && <>
                 <KeyboardAvoidingView style={styles.container}>
                     {/* Form fields */}
@@ -254,22 +289,22 @@ export default function FirstScreen({route, navigation}) {
 
                         <VertMaskInput 
                             label="Área total da propriedade (hectares)"
-                            keyboardType="numeric"
+                            keyboardType="decimal-pad"
                             value={totalArea}
-                            maxLength={20}
+                            maxLength={9}
                             leftIcon={<Ionicons color='#00AE00' size={20} name="scan-outline" />}
                             setValue={setTotalArea}
                         />
                         <VertMaskInput 
                             label="Área total da reserva legal (hectares)"
-                            keyboardType="numeric"
+                            keyboardType="decimal-pad"
                             value={totalLegalArea}
-                            maxLength={20}
+                            maxLength={9}
                             leftIcon={<Ionicons color='#00AE00' size={20} name="expand-outline" />}
                             setValue={setTotalLegalArea}
                         />
                         <VertMaskInput 
-                            label="Endereço da propriedade"
+                            label="Endereço ou geolocalização da propriedade"
                             value={propertieAddress}
                             maxLength={120}
                             leftIcon={<Ionicons color='#00AE00' size={20} name="map-outline" />}
@@ -278,7 +313,7 @@ export default function FirstScreen({route, navigation}) {
                         {/* Button Area */}
                         <View>
                             <Button onPress={goToNextScreen} containerStyle={{ marginVertical: 16 }} title='Próximo' />
-                            <Button onPress={saveAndContinueLater} type="clear" title='Continuar mais tarde' />
+                            <Button onPress={saveAndContinueLater} type="outline" title='Continuar mais tarde' />
                         </View>
                     </ScrollView>
                 </KeyboardAvoidingView>

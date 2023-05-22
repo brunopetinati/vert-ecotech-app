@@ -12,7 +12,7 @@ export default function ListItem({children}) {
 const styles = StyleSheet.create({
   container: {
     position: 'relative',
-    height: Height*0.2,
+    height: Platform.OS == 'ios' ? Height*0.22 : Height*0.2,
     width: Width*0.9,
     padding: 16,
     borderBottomWidth: 1,

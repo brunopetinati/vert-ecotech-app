@@ -46,13 +46,13 @@ export default function ForgotPassword({navigation}) {
             <View style={styles.formBox}>
                 <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
                 <Text style={styles.title}>Esqueceu sua senha?</Text>
-                <Text style={styles.description}>Insira seu email para redefinir sua senha</Text>
+                <Text style={styles.description}>Insira seu email para redefinir sua senha.</Text>
                 <Input 
                     value={email} 
                     onChangeText={setEmail} 
                     errorMessage={passwordError}
-                leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />} 
-                placeholder="Insira seu email" 
+                    leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />} 
+                    placeholder="Insira seu email" 
                 />
                 <Button style={styles.button} onPress={sendResetPasswordEmail}>Enviar</Button>
                 <Button type='outline' style={{ width: Width*0.75, marginTop: 16, }} onPress={() => navigation.navigate('Login')}>Voltar</Button>
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         marginTop: 24,
+        marginBottom: 24,
     },
     button: {
         width: Width*0.75,
