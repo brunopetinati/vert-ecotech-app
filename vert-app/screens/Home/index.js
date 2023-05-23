@@ -94,10 +94,6 @@ export default function Home({navigation}) {
     }
     useEffect(() => { getUserInfo() }, [])
 
-    function startToAddPropertie() {
-        navigation.navigate('AddPropertie')
-    }
-
     function openProject(project) {
         navigation.navigate('AddPropertie', { 
             screen: 'First', 
@@ -130,6 +126,7 @@ export default function Home({navigation}) {
         return(
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
                 <WelcomeHeader navigation={navigation} userName={userCredentials.full_name} />
+                
                 { propertiesList == null ?
                 <LoadingAnimation text={'Carregando seus projetos'}/>
                 :
@@ -159,12 +156,6 @@ export default function Home({navigation}) {
                     }
                 </View>
                 }
-                <FAB 
-                    style={{position: 'absolute', bottom: 16, right: 16}} 
-                    title="Adicionar projeto" 
-                    onPress={startToAddPropertie} 
-                    icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
-                />
             </SafeAreaView>
         )    
     }

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { Text } from '@rneui/themed'
+import { useEffect, useState } from 'react'
 
 const Toast = ({ message, duration = 3000 }) => {
   const [fadeAnim] = useState(new Animated.Value(0));

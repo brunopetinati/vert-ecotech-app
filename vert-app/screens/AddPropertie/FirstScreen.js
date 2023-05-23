@@ -8,17 +8,17 @@ import VertMaskInput from "../../components/VertMaskInput";
 import api from '../../Api'
 import { getData } from '../../Storage'
 import Onboarding from 'react-native-onboarding-swiper';
-import IOSToast from '../../components/IOSTaste'
+import { useContext } from "react";
+import Toast from 'react-native-root-toast';
 
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
-    console.clear()
-    console.log(project)
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
 
+    // TOAST
+    const showToast = useContext(Toast)
+
     // FORM
-    const [IosToastVisible, setVisible] = useState(false)
-    const [IosToastMessage, setMessage] = useState('')
     const [hasChanges, setChanges] = useState(false)
     const [title, setTitle] = useState('')
     const [userCredentials, setUserCredentials] = useState({})
@@ -59,17 +59,11 @@ export default function FirstScreen({route, navigation}) {
         getUserData()
     }, [])
     function makeToast(message) {
-        if(Platform.OS == 'android') {
-            ToastAndroid.showWithGravity(message, ToastAndroid.SHORT, ToastAndroid.CENTER,)
-            return
-        }
-        setMessage(message)
-        setVisible(true)
-
-        setTimeout(() => {
-            setVisible(false)
-            console.log('IOS')
-        }, 5000)
+        // Add a Toast on screen
+        let toast = Toast.show(message, {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM
+        })
     }
     function validateFields() {
         let isValid = true
@@ -146,7 +140,7 @@ export default function FirstScreen({route, navigation}) {
             if (!updateProject(project.id)) {
                 makeToast('Erro ao salvar projeto, tente novamente mais tarde!')
             } else {
-                makeToast('Projeto atualizado')
+                makeToast('Atualizado')
             }
         } else {
             if(title != '' && totalArea != '' && totalLegalArea != '') {
@@ -160,7 +154,7 @@ export default function FirstScreen({route, navigation}) {
             }
         }
 
-        //navigation.navigate('Home')
+        navigation.navigate('Home')
     }
     function goToNextScreen() {
         if(project != undefined) {
@@ -170,7 +164,7 @@ export default function FirstScreen({route, navigation}) {
 
                 return
             } else {
-                makeToast('Sincronizando')
+                makeToast('Sincronizando.')
             }
         }
         else {
@@ -184,7 +178,7 @@ export default function FirstScreen({route, navigation}) {
                     makeToast('Informações')
                 }
             } else {
-                makeToast('Revise suas informações')
+                makeToast('Preencha todos os campos completamente')
                 return
             }
         }
@@ -236,7 +230,6 @@ export default function FirstScreen({route, navigation}) {
                 /> 
                 </>
             }
-            {IosToastVisible && <IOSToast message={IosToastMessage} />}
             { !isTutorialVisible && <>
                 <KeyboardAvoidingView style={styles.container}>
                     {/* Form fields */}

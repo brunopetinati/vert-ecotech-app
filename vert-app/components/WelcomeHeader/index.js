@@ -1,10 +1,16 @@
 import { Button, StyleSheet, Text, View } from "react-native"
 import { Ionicons } from '@expo/vector-icons'
 import { Height, Width } from "../../constants/dimensions"
-import { Badge } from "@rneui/themed"
+import { Badge, FAB } from "@rneui/themed"
 
 export default function WelcomeHeader({ navigation, userName, notifications }) {
+
+    function startToAddPropertie() {
+        navigation.navigate('AddPropertie')
+    }
+
     return (
+        <>
         <View style={styles.header}>
             <View style={styles.greetings}>
                 <Text style={styles.bigText}>{`Olá, ${userName.split(' ')[0]}`}</Text>
@@ -19,6 +25,13 @@ export default function WelcomeHeader({ navigation, userName, notifications }) {
                 <Ionicons onPress={() => {navigation.navigate('Notifications')}} style={styles.notificationIcon} size={32} name="notifications-outline" color='#00AE00'/>
             </View>
         </View>
+        <FAB 
+            style={{position: 'relative', bottom: -16, right: -Width*0.2}} 
+            title="Adicionar projeto" 
+            onPress={startToAddPropertie} 
+            icon={<Ionicons name="add-outline" color="#fff" size={24}/>}
+        />
+        </>
     )
 }
 

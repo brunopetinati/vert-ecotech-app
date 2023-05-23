@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons'
 import SelectDropdown from 'react-native-select-dropdown'
 import { useEffect, useState } from "react"
 import api from '../../Api'
+import Toast from "react-native-root-toast"
 
 export default function SecondScreen({route, navigation}) {
     console.clear()
@@ -37,13 +38,11 @@ export default function SecondScreen({route, navigation}) {
     }, [])
 
     function makeToast(message) {
-        if(Platform.OS == 'android') {
-            ToastAndroid.showWithGravity(
-                message,
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-            )
-        }
+        // Add a Toast on screen
+        let toast = Toast.show(message, {
+            duration: Toast.durations.LONG,
+            position: Toast.positions.BOTTOM
+        })
     }
     async function updateProject(id) {
         let result = false
