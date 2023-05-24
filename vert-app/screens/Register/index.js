@@ -70,7 +70,7 @@ export default function Register({navigation}) {
             state: state,
             email: email,
             password: password,
-            user_type: 'regular',
+            user_type: 'Regular',
           }
         ).then((response) => {
             if (response.status === 201) {
