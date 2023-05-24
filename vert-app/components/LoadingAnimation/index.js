@@ -18,6 +18,7 @@ export default function LoadingAnimation({text, icon}) {
 
 const styles = StyleSheet.create({
     view: {
+        marginTop: 32,
         backgroundColor: '#ffffff',
         flex: 1,
         alignItems: 'center',

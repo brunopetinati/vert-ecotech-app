@@ -1,6 +1,6 @@
 import { Text, FAB } from "@rneui/themed"
 import { useState, useEffect, useContext } from "react"
-import { FlatList, StyleSheet, View, TouchableOpacity, Image, ToastAndroid } from "react-native"
+import { FlatList, StyleSheet, View, TouchableOpacity, Image } from "react-native"
 import { SafeAreaView } from "react-native"
 import ListItem from "../../components/ListItem"
 import WelcomeHeader from "../../components/WelcomeHeader"
@@ -10,6 +10,7 @@ import api from '../../Api'
 import { getData } from "../../Storage"
 import { Dialog } from "@rneui/base"
 import LoadingAnimation from "../../components/LoadingAnimation"
+import Toast from "react-native-root-toast"
 
 export default function Home({navigation}) {
     // const [ propertiesList, setPropertiesList ] = useState([
@@ -73,9 +74,15 @@ export default function Home({navigation}) {
         .then(({data}) => {
             if(propertiesList != null) {
                 if (data.length != propertiesList.length) {
-                    ToastAndroid.showWithGravity('Atualizado', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+                    let toast = Toast.show('Atualizando', {
+                        duration: Toast.durations.LONG,
+                        position: Toast.positions.BOTTOM
+                    })
                 } else {
-                    ToastAndroid.showWithGravity('Nenhuma novidade', ToastAndroid.SHORT, ToastAndroid.CENTER,)
+                    let toast = Toast.show('Nada de novo por aqui', {
+                        duration: Toast.durations.LONG,
+                        position: Toast.positions.BOTTOM
+                    })
                 }
             }
 

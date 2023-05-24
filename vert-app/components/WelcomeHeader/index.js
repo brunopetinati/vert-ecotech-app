@@ -54,6 +54,7 @@ const styles = StyleSheet.create({
     },
     smallText: {
         fontSize: Width*0.05,
+        fontStyle: 'italic'
     },
     notificationIcon: {
 

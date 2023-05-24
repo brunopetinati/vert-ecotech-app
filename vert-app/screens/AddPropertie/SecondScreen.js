@@ -22,7 +22,6 @@ export default function SecondScreen({route, navigation}) {
     const [divida, setDivida] = useState(false)
     // conservation_unit ["privada", "pública", "não possui", "ambas"]
     const [hasConservationArea, setConservationArea] = useState(false)
-    const [georeferenciamentoSigef, setgeoreferenciamentoSigef] = useState('')
 
     useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
     useEffect(() => {
@@ -33,7 +32,6 @@ export default function SecondScreen({route, navigation}) {
             setLegalReserveStatus(project.reserve_legal_status)
             setMatriculaStatus(project.matricula_status)
             setSicarStatus(project.status_car)
-            setgeoreferenciamentoSigef(project.georeferencing_status)
         }
     }, [])
 
@@ -50,7 +48,6 @@ export default function SecondScreen({route, navigation}) {
         await api.put(`/projects/${id}/update/`, {
             status_car: sicarStatus,
             matricula_status: matriculaStatus,
-            georeferencing_status: georeferenciamentoSigef,
             reserve_legal_status: legalReserveStatus,
             legal_reserve_deficit: deficetLegal,
             has_federal_debt: divida,
@@ -96,16 +93,17 @@ export default function SecondScreen({route, navigation}) {
                 {/* Form fields */}
                 <ScrollView contentContainerStyle={styles.internContainer}>
                     {/* STATUS DO SICAR */}
-                    <View>
-                        <Text>Status do CAR</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Status do CAR</Text>
                         <SelectDropdown 
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={sicarStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Status do SICAR"
+                            defaultButtonText="Selecione uma opção"
                             data={sicStatus}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setSicarStatus(selectedItem)
                             }}
@@ -122,16 +120,17 @@ export default function SecondScreen({route, navigation}) {
                         />
                     </View>
                     {/* DEFICIT LEGAL */}
-                    <View>
-                        <Text>Possui déficit de reserva legal?</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Possui déficit de reserva legal?</Text>
                         <SelectDropdown 
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={trueOrFalse(deficetLegal)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Possui déficit de reserva legal?"
+                            defaultButtonText="Selecione uma opção"
                             data={yesOrNOt}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%',backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setLegalDeficet(trueOrFalse(selectedItem))
                             }}
@@ -148,16 +147,17 @@ export default function SecondScreen({route, navigation}) {
                         />
                     </View>
                     {/* TEM DÍVIDA? */}
-                    <View>
-                        <Text>Possui dívida federal?</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Possui dívida federal?</Text>
                         <SelectDropdown 
-                            dropdownIconPosition="left"
+                            dropdownIconPosition='left'
                             statusBarTranslucent
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={trueOrFalse(divida)}
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Possui dívida federal, notificação ou multa ambiental?"
+                            defaultButtonText="Selecione uma opção"
                             data={yesOrNOt}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setDivida(trueOrFalse(selectedItem))
                             }}
@@ -174,16 +174,17 @@ export default function SecondScreen({route, navigation}) {
                         />
                     </View>
                     {/* STATUS DA MATRICULA */}
-                    <View>
-                        <Text>Status da matrícula do imóvel</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Status da matrícula do imóvel</Text>
                         <SelectDropdown 
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={matriculaStatus}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Status da matrícula do imóvel"
+                            defaultButtonText="Selecione uma opção"
                             data={regOrNot}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setMatriculaStatus(selectedItem)
                                 console.log(selectedItem, index)
@@ -200,44 +201,18 @@ export default function SecondScreen({route, navigation}) {
                             }}
                         />
                     </View>
-                    {/* GEOREFERENCIAMENTO NO SIGEF */}
-                    <View>
-                        <Text>Georeferenciamento no SIGEF</Text>
-                        <SelectDropdown 
-                            defaultValue={georeferenciamentoSigef}
-                            dropdownIconPosition="left"
-                            statusBarTranslucent
-                            renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Georeferenciamento no SIGEF"
-                            data={yesOrNOt}
-                            buttonStyle={{width: '100%'}}
-                            onSelect={(selectedItem, index) => {
-                                setgeoreferenciamentoSigef(selectedItem)
-                                console.log(selectedItem, index)
-                            }}
-                            buttonTextAfterSelection={(selectedItem, index) => {
-                                // text represented after item is selected
-                                // if data array is an array of objects then return selectedItem.property to render after item is selected
-                                return selectedItem
-                            }}
-                            rowTextForSelection={(item, index) => {
-                                // text represented for each item in dropdown
-                                // if data array is an array of objects then return item.property to represent item in dropdown
-                                return item
-                            }}
-                        />
-                    </View>
                     {/* SITUAÇÃO DA RESERVA LEGAL */}
-                    <View>
-                        <Text>Situação da reserva legal</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Situação da reserva legal</Text>
                         <SelectDropdown 
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={trueOrFalse(legalReserveStatus)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Situação da reserva legal"
+                            defaultButtonText="Selecione uma opção"
                             data={yesOrNOt}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setLegalReserveStatus(selectedItem)
                                 console.log(selectedItem, index)
@@ -255,16 +230,17 @@ export default function SecondScreen({route, navigation}) {
                         />
                     </View>
                     {/* POSSUI UNIDADE DE CONSERVAÇÃO */}
-                    <View>
-                        <Text>Possui unidade de consevação?</Text>
+                    <View style={styles.box}>
+                        <Text style={styles.title}>Possui unidade de consevação?</Text>
                         <SelectDropdown 
+                            buttonTextStyle={{textAlign: 'left', fontSize: 16, color: '#666'}}
                             defaultValue={trueOrFalse(hasConservationArea)}
                             dropdownIconPosition="left"
                             statusBarTranslucent
                             renderDropdownIcon={() => <Ionicons color='#00AE00' size={24} name="chevron-down-outline" />}
-                            defaultButtonText="Possui unidade de consevação?"
+                            defaultButtonText="Selecione uma opção"
                             data={yesOrNOt}
-                            buttonStyle={{width: '100%'}}
+                            buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
                                 setConservationArea(selectedItem)
                                 console.log(selectedItem, index)
@@ -298,6 +274,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 32,
+        backgroundColor: '#fff',
     },
     internContainer: {
         flex: 1,
@@ -305,4 +282,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 8,
     },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold'
+    },
+    box: {
+        marginBottom: 8
+    }
 })

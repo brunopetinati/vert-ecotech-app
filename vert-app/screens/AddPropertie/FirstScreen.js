@@ -1,5 +1,5 @@
-import { Button, Text } from "@rneui/themed";
-import { KeyboardAvoidingView, ScrollView, View, StyleSheet, Image } from "react-native";
+import { Button, Dialog, Text } from "@rneui/themed";
+import { ScrollView, View, StyleSheet, Image } from "react-native";
 import { Ionicons } from '@expo/vector-icons';
 import { Masks } from 'react-native-mask-input';
 import { useEffect, useState } from "react";
@@ -11,13 +11,12 @@ import Onboarding from 'react-native-onboarding-swiper';
 import { useContext } from "react";
 import {Width} from '../../constants/dimensions'
 import Toast from 'react-native-root-toast';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
-    
-    // TOAST
-    const showToast = useContext(Toast)
+    const [isModalVisible, setErrorModalVisibility] = useState(false)
     
     // FORM
     const [hasChanges, setChanges] = useState(false)
@@ -27,17 +26,20 @@ export default function FirstScreen({route, navigation}) {
     const [totalLegalArea, setTotalLegalArea] = useState('')
     const [propertieAddress, setPropertieAddress] = useState('')
     const [cpnj, setCnpj] = useState('')
+    const [sigef, setSigef] = useState('')
     const [sicar, setSicar] = useState('')
-    const [errorArray, setErrorArray] = useState([
-        {title : 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).'},
-        {totalArea : 'Área total do projeto deve ser '},
-        {areaLegalTotal : 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).'},
-    ])
-    useEffect(() =>
-        navigation.addListener('beforeRemove', (e) => { 
-            e.preventDefault() 
-        })
-    )
+
+    // ERROS
+    const [errorArray, setErrorArray] = useState({
+        title : '',
+        totalArea : '',
+        areaLegalTotal : '',
+        propertieAddress: '',
+        cnpj: '',
+        sicar: '',
+    })
+    useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
+
     function removeCharsCpfOrCnpj(str) {
         return str.replace(/[./-]/g, '');
     }
@@ -72,24 +74,51 @@ export default function FirstScreen({route, navigation}) {
     }
     function validateFields() {
         let isValid = true
+        setErrorArray(null)
 
-        if (title.length < 5) {
-            
+        if (title.length < 6) {
+            setErrorArray(
+                ...errorArray,
+                { title: 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).' }
+            )
 
             isValid = false    
         }
         if (sicar.length != 50) {
-            
+            setErrorArray(
+                ...errorArray,
+                { sicar: 'Digite um SICAR válido.' }
+            )
 
             isValid = false    
         }
         if (propertieAddress.length < 10) {
-            
+            setErrorArray(
+                ...errorArray,
+                { propertieAddress: 'Digite um endereço ou geolocalização para sua propriedade.' }
+            )
 
             isValid = false
         }
-        if (totalArea.length < 4) {
-            
+        if (cpnj.length < 11) {
+            setErrorArray(
+                ...errorArray,
+                { cnpj: 'Digite uma CNPJ ou CPF válido.' }
+            )
+
+            isValid = false
+        }
+        if (totalArea.length < 2) {
+            setErrorArray(
+                { totalArea: 'Área total do projeto deve ser um número válido.' }
+            )
+
+            isValid = false
+        }
+        if (totalLegalArea.length < 2) {
+            setErrorArray(
+                { totalLegalArea: 'Área legal total do projeto deve ser um número válido.' }
+            )
 
             isValid = false
         }
@@ -229,30 +258,41 @@ export default function FirstScreen({route, navigation}) {
                     skipLabel={<Text>Pular</Text>}
                     nextLabel={<Text>Próximo</Text>}
                     onDone={() =>{
-                        console.log("Finalizr")
+                        console.log("Finalizar")
                         setTutorialVisibility(false) 
                     }}
-                    DoneButtonComponent={() => <Text style={{ marginRight: Width*0.05, fontSize: 18, fontWeight: 'bold' }}>Iniciar</Text>}
+                    DoneButtonComponent={() => (
+                        <Text 
+                            onPress={() => setTutorialVisibility(false)} 
+                            style={{ marginRight: Width*0.05, fontSize: 18, fontWeight: 'bold', color: '#00AE00'}}>
+                            Iniciar
+                        </Text>
+                    )}
                 /> 
                 </>
             }
             { !isTutorialVisible && <>
-                <KeyboardAvoidingView style={styles.container}>
+                <KeyboardAwareScrollView contentContainerStyle={styles.container}>
                     {/* Form fields */}
+                    { isModalVisible &&
+                    <Dialog isVisible={isModalVisible} onBackdropPress={() => setErrorModalVisibility(false)}>
+                        <Dialog.Title titleStyle={styles.modalTitleStyle} title='Atenção!' />
+                        {errorArray.map((item, i) => <Text key={i}>- {item}</Text>)}
+                    </Dialog>
+                    }
                     <ScrollView contentContainerStyle={styles.container}>
-                    <VertMaskInput 
+                        <VertMaskInput 
                             setChanges={setChanges}
                             label="Insira um título para esse projeto"
                             value={title}
                             maxLength={50}
-                            leftIcon={<Ionicons color='#00AE00' size={20} name="text-outline" />}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
                             setValue={setTitle}
                         />
                         <VertMaskInput 
-                            label="CNPJ do proprietário"
+                            label="CNPJ ou CPF do proprietário"
                             value={cpnj}
                             maxLength={100}
-                            mask={Masks.BRL_CNPJ}
                             leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
                             setValue={setCnpj}
                         />
@@ -303,6 +343,13 @@ export default function FirstScreen({route, navigation}) {
                             setValue={setTotalLegalArea}
                         />
                         <VertMaskInput 
+                            label="Georeferenciamentono SIGEF"
+                            keyboardType="decimal-pad"
+                            value={sigef}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="location-outline" />}
+                            setValue={setSigef}
+                        />
+                        <VertMaskInput 
                             label="Endereço ou geolocalização da propriedade"
                             value={propertieAddress}
                             maxLength={120}
@@ -315,7 +362,7 @@ export default function FirstScreen({route, navigation}) {
                             <Button onPress={saveAndContinueLater} type="outline" title='Continuar mais tarde' />
                         </View>
                     </ScrollView>
-                </KeyboardAvoidingView>
+                </KeyboardAwareScrollView>
             </>}
         </>
     )
@@ -326,6 +373,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignContent: 'center',
         justifyContent: 'center',
+        backgroundColor: '#fff',
         padding: Platform.OS === 'ios' ? 16 : 20,
     },
     onboardingImages: {

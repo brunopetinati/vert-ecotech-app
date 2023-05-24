@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
         padding: 8,
+        backgroundColor: '#fff',
     },
     cardContainer: {
         flex: 1,

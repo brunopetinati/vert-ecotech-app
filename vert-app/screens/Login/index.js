@@ -117,6 +117,7 @@ export default function Login({navigation}) {
           <View style={styles.loginArea}>
             <Image style={styles.vertIcon} source={VertIcon} resizeMode="contain"/>
             <Input 
+              autoCapitalize="none"
               value={email} 
               keyboardType="email-address"
               onChangeText={setEmail} 
@@ -126,6 +127,7 @@ export default function Login({navigation}) {
             />
             <Input 
               value={password} 
+              autoCapitalize="none"
               onChangeText={setPassword} 
               errorMessage={passwordError} 
               leftIcon={<Ionicons color='#00AE00' size={20} name="key-outline" />} 
