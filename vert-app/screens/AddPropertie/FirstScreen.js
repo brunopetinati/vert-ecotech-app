@@ -9,15 +9,16 @@ import api from '../../Api'
 import { getData } from '../../Storage'
 import Onboarding from 'react-native-onboarding-swiper';
 import { useContext } from "react";
+import {Width} from '../../constants/dimensions'
 import Toast from 'react-native-root-toast';
 
 export default function FirstScreen({route, navigation}) {
     const { project } = route.params
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
-
+    
     // TOAST
     const showToast = useContext(Toast)
-
+    
     // FORM
     const [hasChanges, setChanges] = useState(false)
     const [title, setTitle] = useState('')
@@ -208,7 +209,7 @@ export default function FirstScreen({route, navigation}) {
                             backgroundColor: '#fff',
                             image: <Image style={styles.onboardingImages} source={require('../../assets/documents.gif')} />,
                             title: 'Documentos obrigatórios ',
-                            subtitle: <Text style={{fontSize: 16, paddingHorizontal: 16}}>{'É importante citar que nosso time só conseguirá analisar um projeto com no mínimo os seguintes dados:\n\n CAR(SICAR) \n Polígono da propriedade (KML/KMZ) \n cópia do CCIR \n\n Lembrando que quanto mais informções, mais precisa será a análise por parte de nosso time.'}</Text>,
+                            subtitle: <Text style={{fontSize: 16, paddingHorizontal: 16}}>{'É importante citar que nosso time só conseguirá analisar um projeto com no mínimo os seguintes dados:\n\n - CAR(SICAR) \n - Polígono da propriedade (KML/KMZ) \n - Cópia do CCIR  \n - Número do SIGEF \n\nLembrando que quanto mais informções, mais precisa será a análise por parte de nosso time.'}</Text>,
                         },
                         {
                             backgroundColor: '#fff',
@@ -227,6 +228,7 @@ export default function FirstScreen({route, navigation}) {
                         console.log("Finalizr")
                         setTutorialVisibility(false) 
                     }}
+                    DoneButtonComponent={() => <Text style={{ marginRight: Width*0.05, fontSize: 18, fontWeight: 'bold' }}>Iniciar</Text>}
                 /> 
                 </>
             }
