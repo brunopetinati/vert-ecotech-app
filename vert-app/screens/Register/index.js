@@ -33,7 +33,7 @@ export default function Register({navigation}) {
             setFieldErrors(fieldErrors => [...fieldErrors, 'O campo nome precisa ter pelo menos 6 caracteres. Por favor, tente novamente.'])
             hasErrors = true
         }
-        if (email.length >= 6 && email.includes("@")) {
+        if (email.length < 6 && !email.includes("@")) {
             console.log(email)
             setFieldErrors(fieldErrors => [...fieldErrors, 'O endereço de e-mail que você digitou é inválido. Certifique-se de digitar um endereço de e-mail válido com pelo menos 6 caracteres.'])
             hasErrors = true

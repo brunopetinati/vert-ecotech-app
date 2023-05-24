@@ -28,7 +28,11 @@ export default function FirstScreen({route, navigation}) {
     const [propertieAddress, setPropertieAddress] = useState('')
     const [cpnj, setCnpj] = useState('')
     const [sicar, setSicar] = useState('')
-
+    const [errorArray, setErrorArray] = useState([
+        {title : 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).'},
+        {totalArea : 'Área total do projeto deve ser '},
+        {areaLegalTotal : 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).'},
+    ])
     useEffect(() =>
         navigation.addListener('beforeRemove', (e) => { 
             e.preventDefault() 
