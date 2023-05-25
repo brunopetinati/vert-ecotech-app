@@ -99,7 +99,9 @@ export default function Home({navigation}) {
         console.log("NA HOME")
         getPropertieList(userData.id)
     }
-    useEffect(() => { getUserInfo() }, [])
+    useEffect(() => {
+        getUserInfo()
+    }, [])
 
     function openProject(project) {
         navigation.navigate('AddPropertie', { 

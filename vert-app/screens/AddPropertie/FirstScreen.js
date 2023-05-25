@@ -14,7 +14,7 @@ import Toast from 'react-native-root-toast';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function FirstScreen({route, navigation}) {
-    const { project } = route.params
+    let { project } = route.params
     const [isTutorialVisible, setTutorialVisibility] = useState(true)
     const [isModalVisible, setErrorModalVisibility] = useState(false)
     
@@ -37,6 +37,7 @@ export default function FirstScreen({route, navigation}) {
         propertieAddress: '',
         cnpj: '',
         sicar: '',
+        sigef: '',
     })
     useEffect(() => navigation.addListener('beforeRemove', (e) => { e.preventDefault() }))
 
@@ -61,6 +62,7 @@ export default function FirstScreen({route, navigation}) {
             setCnpj(removeCharsCpfOrCnpj(project.cnpj))
             setSicar(removeCharsCpfOrCnpj(project.sicar_code))
             setPropertieAddress(project.address)
+            setSigef(project.georeferencing_status)
             
         }
         getUserData()
@@ -77,51 +79,64 @@ export default function FirstScreen({route, navigation}) {
         setErrorArray(null)
 
         if (title.length < 6) {
-            setErrorArray(
+            setErrorArray(errorArray => ({
                 ...errorArray,
-                { title: 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).' }
-            )
+                ...{ title: 'Insira um título relevante para se lembrar do projeto (Ex: Fazenda Santa Cecília).' }
+            }))
 
             isValid = false    
         }
         if (sicar.length != 50) {
-            setErrorArray(
+            setErrorArray(errorArray => ({
                 ...errorArray,
-                { sicar: 'Digite um SICAR válido.' }
-            )
+                ...{ sicar: 'Digite um SICAR válido.' }
+            }))
 
             isValid = false    
         }
         if (propertieAddress.length < 10) {
-            setErrorArray(
+            setErrorArray(errorArray => ({
                 ...errorArray,
-                { propertieAddress: 'Digite um endereço ou geolocalização para sua propriedade.' }
-            )
+                ...{ propertieAddress: 'Digite um endereço ou geolocalização para sua propriedade.' }
+            }))
 
             isValid = false
         }
         if (cpnj.length < 11) {
-            setErrorArray(
+            setErrorArray(errorArray => ({
                 ...errorArray,
-                { cnpj: 'Digite uma CNPJ ou CPF válido.' }
-            )
+                ...{ cnpj: 'Digite uma CNPJ ou CPF válido.' }
+            }))
 
             isValid = false
         }
         if (totalArea.length < 2) {
-            setErrorArray(
-                { totalArea: 'Área total do projeto deve ser um número válido.' }
-            )
+            setErrorArray(errorArray => ({
+                ...errorArray,
+                ...{ totalArea: 'Área total do projeto deve ser um número válido.' }
+            }))
 
             isValid = false
         }
         if (totalLegalArea.length < 2) {
-            setErrorArray(
-                { totalLegalArea: 'Área legal total do projeto deve ser um número válido.' }
-            )
+            setErrorArray(errorArray => ({
+                ...errorArray,
+                ...{ totalLegalArea: 'Área legal total do projeto deve ser um número válido.' }
+            }))
 
             isValid = false
         }
+        if (sigef.length != 17 || sigef.includes('_')) {
+            setErrorArray(errorArray => ({
+                ...errorArray,
+                ...{ sigef: 'O SIGEF deve ser um número válido.' }
+            }))
+
+            isValid = false
+        }
+
+        console.log(sigef)
+        console.log(sigef.length)
 
         return isValid
     }
@@ -137,9 +152,12 @@ export default function FirstScreen({route, navigation}) {
             legal_reserve_area: totalLegalArea,
             address: propertieAddress,
             cnpj: cpnj,
+            georeferencing_status: sigef,
             sicar_code: sicar,
         }).then(({data}) => {
             console.log(data)
+            project = data
+            console.log(project)
             result = true
         }).catch((error) => {
             console.log(error)
@@ -158,6 +176,7 @@ export default function FirstScreen({route, navigation}) {
             legal_reserve_area: parseFloat(totalLegalArea),
             address: propertieAddress,
             cnpj: cpnj,
+            georeferencing_status: sigef,
             sicar_code: sicar,
         }).then((response) => {
             result = true
@@ -199,6 +218,7 @@ export default function FirstScreen({route, navigation}) {
                 return
             } else {
                 makeToast('Sincronizando.')
+                navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
             }
         }
         else {
@@ -209,15 +229,19 @@ export default function FirstScreen({route, navigation}) {
 
                     return
                 } else {
-                    makeToast('Informações')
+                    makeToast('Informações salvas')
+
+                    navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
                 }
             } else {
+                setErrorModalVisibility(true)
                 makeToast('Preencha todos os campos completamente')
+
                 return
             }
         }
 
-        navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
+        
     }
 
     return(
@@ -277,7 +301,9 @@ export default function FirstScreen({route, navigation}) {
                     { isModalVisible &&
                     <Dialog isVisible={isModalVisible} onBackdropPress={() => setErrorModalVisibility(false)}>
                         <Dialog.Title titleStyle={styles.modalTitleStyle} title='Atenção!' />
-                        {errorArray.map((item, i) => <Text key={i}>- {item}</Text>)}
+                        {Object.keys(errorArray).map((key) => {
+                            return errorArray[key] && <Text style={{marginBottom: 16}} key={key}>- {errorArray[key]}</Text>
+                        })}
                     </Dialog>
                     }
                     <ScrollView contentContainerStyle={styles.container}>
@@ -286,13 +312,14 @@ export default function FirstScreen({route, navigation}) {
                             label="Insira um título para esse projeto"
                             value={title}
                             maxLength={50}
-                            leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
+                            leftIcon={<Ionicons color='#00AE00' size={20} name="document-text-outline" />}
                             setValue={setTitle}
                         />
                         <VertMaskInput 
                             label="CNPJ ou CPF do proprietário"
                             value={cpnj}
-                            maxLength={100}
+                            maxLength={20}
+                            keyboardType='number-pad'
                             leftIcon={<Ionicons color='#00AE00' size={20} name="person-outline" />}
                             setValue={setCnpj}
                         />
@@ -346,6 +373,17 @@ export default function FirstScreen({route, navigation}) {
                             label="Georeferenciamentono SIGEF"
                             keyboardType="decimal-pad"
                             value={sigef}
+                            mask={[
+                                /[0-9]/, /[0-9]/, /[0-9]/, 
+                                '.',
+                                /[0-9]/,/[0-9]/, /[0-9]/, 
+                                '.',    
+                                /[0-9]/, /[0-9]/, /[0-9]/,
+                                '.',
+                                /[0-9]/,/[0-9]/, /[0-9]/, 
+                                '-',
+                                /[0-9]/,  
+                            ]}
                             leftIcon={<Ionicons color='#00AE00' size={20} name="location-outline" />}
                             setValue={setSigef}
                         />
@@ -379,5 +417,9 @@ const styles = StyleSheet.create({
     onboardingImages: {
         width: '75%',
         height: 256
+    },
+    modalTitleStyle: {
+        fontSize: 40,
+        marginBottom: 8,
     },
 })

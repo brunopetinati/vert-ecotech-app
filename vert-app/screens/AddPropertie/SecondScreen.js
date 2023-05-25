@@ -8,8 +8,9 @@ import Toast from "react-native-root-toast"
 
 export default function SecondScreen({route, navigation}) {
     console.clear()
-    console.log(project)
     const { userCredentials, projectId, project } = route.params
+    console.log(project)
+
     // Opções
     const yesOrNOt = ["Sim", "Não"]
     const regOrNot = ["Regularizada", "Não regularizada"]
@@ -47,6 +48,8 @@ export default function SecondScreen({route, navigation}) {
         //Aqui só faz update
         await api.put(`/projects/${id}/update/`, {
             status_car: sicarStatus,
+            conservation_unit: 
+            ,
             matricula_status: matriculaStatus,
             reserve_legal_status: legalReserveStatus,
             legal_reserve_deficit: deficetLegal,
@@ -59,6 +62,7 @@ export default function SecondScreen({route, navigation}) {
         })
         .catch((error) => {
             // Erros na tela
+            console.log(error)
             makeToast('Tente novamente mais tarde')
         })
 
@@ -131,8 +135,12 @@ export default function SecondScreen({route, navigation}) {
                             defaultButtonText="Selecione uma opção"
                             data={yesOrNOt}
                             buttonStyle={{width: '100%',backgroundColor: '#fff'}}
-                            onSelect={(selectedItem, index) => {
-                                setLegalDeficet(trueOrFalse(selectedItem))
+                            onSelect={(selectedItem, index) => {    
+                                if (selectedItem == 'Sim') {
+                                    setLegalDeficet(true)
+                                } else {
+                                    setLegalDeficet(false)   
+                                }
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
@@ -159,7 +167,11 @@ export default function SecondScreen({route, navigation}) {
                             data={yesOrNOt}
                             buttonStyle={{width: '100%', backgroundColor: '#fff'}}
                             onSelect={(selectedItem, index) => {
-                                setDivida(trueOrFalse(selectedItem))
+                                if (selectedItem == 'Sim') {
+                                    setDivida(true)
+                                } else {
+                                    setDivida(false)   
+                                }
                             }}
                             buttonTextAfterSelection={(selectedItem, index) => {
                                 // text represented after item is selected
