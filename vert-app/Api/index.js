@@ -6,17 +6,6 @@ async function getToken() {
   return JSON.parse(tokenString)?.access
 }
 
-const instance = axios.create({
-    baseURL: 'http://3.145.151.125:8000/api',
-    timeout: 10000,
-    headers: {
-      'Accept': 'application/json',
-      'Access-Control-Allow-Headers': '*',
-      'Access-Control-Allow-Origin': '*',
-      'Authorization': `Bearer ${getToken()}`,
-    }
-})
-
 axios.interceptors.request.use(
   async (config) => {
     config.headers.Authorization = `Bearer ${await getToken()}`
