@@ -231,7 +231,7 @@ export default function FirstScreen({route, navigation}) {
                 } else {
                     makeToast('Informações salvas')
 
-                    navigation.navigate('Second', {projectId: project.id, userCredentials: userCredentials, project: project})
+                    navigation.navigate('Second', {projectId: project?.id, userCredentials: userCredentials, project: project})
                 }
             } else {
                 setErrorModalVisibility(true)

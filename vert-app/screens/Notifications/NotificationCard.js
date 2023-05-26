@@ -1,25 +1,29 @@
-import { Text } from "@rneui/themed"
-import { View, StyleSheet } from "react-native"
+import { StyleSheet } from 'react-native';
+import { Text, ListItem, } from '@rneui/themed';
 
-export default function NotificationCard(title, description) {
-    <View style={styles.card}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.description}>{description}</Text>
-    </View>
+export default function NotificationCard({ title, description }) {
+    return(
+        <ListItem containerStyle={styles.container} bottomDivider>
+            <ListItem.Content>
+                <Text style={styles.title}>{title}</Text>
+                <Text style={styles.message}>{description}</Text>
+            </ListItem.Content>
+        </ListItem>
+    )
 }
 
 const styles = StyleSheet.create({
-    card: {
-        padding: 16,
-        borderWidth: 3,
-        borderColor: '#00AE00',
-        marginVertical: 16,
-    },
-    title: {
-        fontSize: 24,
-        marginBottom: 16,
-    },
-    description: {
-
-    },
+    container: {
+        backgroundColor: '#F5F5F5',
+        paddingVertical: 10,
+      },
+      title: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+      },
+      message: {
+        fontSize: 14,
+        color: '#777',
+      },
 })

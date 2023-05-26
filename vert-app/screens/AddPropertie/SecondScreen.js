@@ -48,8 +48,7 @@ export default function SecondScreen({route, navigation}) {
         //Aqui só faz update
         await api.put(`/projects/${id}/update/`, {
             status_car: sicarStatus,
-            conservation_unit: 
-            ,
+            conservation_unit: hasConservationArea,
             matricula_status: matriculaStatus,
             reserve_legal_status: legalReserveStatus,
             legal_reserve_deficit: deficetLegal,
