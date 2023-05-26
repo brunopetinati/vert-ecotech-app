@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "389120024804",
+    "project_id": "vertecotech-3f8ef",
+    "storage_bucket": "vertecotech-3f8ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:389120024804:android:b7a1b62a30680f86864cf1",
+        "android_client_info": {
+          "package_name": "com.vert.vetecotech"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "389120024804-6l061qaoqioh4grf126s8abgqoj0r28c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vert.vetecotech",
+            "certificate_hash": "10acd23f9bfda7589d3c60269596ce635d663daf"
+          }
+        },
+        {
+          "client_id": "389120024804-b44o772mo2qm7j804ms1d42kd0f3c0r5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vert.vetecotech",
+            "certificate_hash": "25a3a185178e57dcf725fb49291e8824e89c88a0"
+          }
+        },
+        {
+          "client_id": "389120024804-r5svlof2bjc0p1k5us08jfcgopvrd4lb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDekajIMqC8YcU6ZoX26ENv_kp8s17Pu9U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "389120024804-r5svlof2bjc0p1k5us08jfcgopvrd4lb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
