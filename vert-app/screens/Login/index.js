@@ -11,6 +11,7 @@ import PlantaLoading from '../../assets/leaf_animation.gif'
 import VertIcon from '../../assets/logo-vert-fundo-transparente.png'
 import * as MediaLibrary from 'expo-media-library'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"
+import Toast from "react-native-root-toast"
 
 export default function Login({navigation}) {
   const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
@@ -80,6 +81,7 @@ export default function Login({navigation}) {
   }
   useEffect(() => {
     
+    showExpoToken()
     askPermissions()
 
     async function fetchData() {
@@ -108,6 +110,20 @@ export default function Login({navigation}) {
       cleanLoginData()
     }
   }
+
+
+  async function showExpoToken() {
+    const expoPushToken = await getData('expoPushToken')
+
+    console.log(expoPushToken)
+    console.log("+++++++++++++++++++++++++++++++")
+
+    Toast.show(expoPushToken, {
+      duration: Toast.durations.LONG,
+      position: Toast.positions.BOTTOM
+    })
+  }
+
 
     return(
       <>

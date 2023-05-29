@@ -39,6 +39,13 @@
         {
           "iCloudContainerEnvironment": "Production"
         }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/marca-vert.png",
+          "color": "#ffffff"
+        }
       ]
     ],
     "android": {

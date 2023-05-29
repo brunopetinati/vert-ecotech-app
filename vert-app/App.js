@@ -13,6 +13,8 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { RootSiblingParent } from 'react-native-root-siblings';
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
+import { getData } from './Storage'
+import { storeData } from './Storage'
 
 const theme = createTheme({
     lightColors: {
@@ -48,7 +50,7 @@ async function registerForPushNotificationsAsync() {
   }
 
   if (Platform.OS === 'android') {
-    Notifications.setNotificationChannelAsync('default', {
+    Notifications.setNotificationChannelAsync('projects', {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
@@ -59,15 +61,15 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
+
+
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [notification, setNotification] = useState(false)
   const notificationListener = useRef()
   const responseListener = useRef()
 
-  console.log('expoPushToken')
-  console.log(expoPushToken)
-  console.log('-------------------------------------------------')
+  storeData('expoPushToken', expoPushToken)
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
