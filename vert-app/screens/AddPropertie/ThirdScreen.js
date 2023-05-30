@@ -99,7 +99,7 @@ export default function ThirdScreen({route, navigation}) {
             {/* Input Fields */}
             <View style={styles.cardContainer}>
                 <FileCardList 
-                    cseertMatricula={certMatricula}
+                    certMatricula={certMatricula}
                     carSicar={carSicar}
                     propertyPolygon={propertyPolygon}
                     cCIR={cCIR}

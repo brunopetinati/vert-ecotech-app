@@ -1,4 +1,4 @@
-import { StyleSheet, SafeAreaView, View, Platform, PermissionsAndroid, Image } from "react-native"
+import { StyleSheet, View, Platform, PermissionsAndroid, Image } from "react-native"
 import { Button, Input, Text } from '@rneui/themed'
 import { Width } from "../../constants/dimensions"
 import { Ionicons } from '@expo/vector-icons'
@@ -14,9 +14,8 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import Toast from "react-native-root-toast"
 
 export default function Login({navigation}) {
-  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions();
-  console.log(permissionResponse)
 
+  const [permissionResponse, requestPermission] = MediaLibrary.usePermissions()
   const [isLoading, setLoading] = useState(false)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -24,6 +23,7 @@ export default function Login({navigation}) {
   const [passwordError, setPasswordError] = useState("")
   const [isPasswordVisible, setPasswordVisibility] = useState(true)
   const [passwordEye, setPasswordEye] = useState('eye-off-outline')
+
   function cleanLoginData() {
     setTimeout(() => {
       setEmailError("")
