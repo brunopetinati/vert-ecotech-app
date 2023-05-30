@@ -31,7 +31,8 @@ const theme = createTheme({
 const ParentStack = createNativeStackNavigator()
 
 async function registerForPushNotificationsAsync() {
-  let token;
+  let token
+
   if (Device.isDevice) {
     const { status: existingStatus } = await Notifications.getPermissionsAsync();
     let finalStatus = existingStatus;
@@ -61,8 +62,6 @@ async function registerForPushNotificationsAsync() {
   return token;
 }
 
-
-
 export default function App() {
   const [expoPushToken, setExpoPushToken] = useState('')
   const [notification, setNotification] = useState(false)
@@ -72,8 +71,25 @@ export default function App() {
   storeData('expoPushToken', expoPushToken)
 
   useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+    async function hasDeviceToken() {
+      let isAlreadyRegistered = false
+      const deviceToken = await getData('deviceToken')
+
+      if (typeof(deviceToken) === 'string') {
+        isAlreadyRegistered = true
+      }
+
+      return isAlreadyRegistered
+    }
+    // Se já está cadastrado ou não
+    if (hasDeviceToken) {
+      registerForPushNotificationsAsync().then(token => {
+        setExpoPushToken(token)
+        storeData('deviceToken', token)
+      })
+    }
   
+    // Listeners
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
