@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
     header: {
         borderBottomColor: '#00AE00',
         borderBottomWidth: 1,
-        paddingTop: 32,
+        paddingTop: 0,
         paddingHorizontal: 32,
         flexDirection: 'row',
         alignItems: 'center',
         width: Width,
-        height: Height*0.2,
+        height: Height*0.15,
     },
     greetings: {
         width: '90%',

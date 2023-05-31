@@ -1,9 +1,11 @@
 import { SafeAreaView, StyleSheet, View, FlatList, TouchableOpacity } from "react-native"
 import { Text } from '@rneui/themed'
-//import RNFS from 'react-native-fs';
+//import RNFS from 'react-native-fs'
+import * as FileSystem from 'expo-file-system';
 import { Ionicons } from '@expo/vector-icons'
 import * as DocumentPicker from 'expo-document-picker'
 import { Width } from "../../constants/dimensions"
+import api from '../../Api'
 
 export default function CardArquivo({ 
   certMatricula,
@@ -74,19 +76,34 @@ export default function CardArquivo({
       const response = await DocumentPicker.getDocumentAsync({
         type: "application/pdf", // .pdf
         multiple: false,
+        copyToCacheDirectory: true
       })
-      //const fileData = await FileSystem.readAsStringAsync(response.uri)
+
       if(response.type == 'cancel') {
         return false
       }
-      console.log('ARQUIVO')
-      console.log(response)
-      //console.log(fileData)
-      console.log('++++++++++++++++++++++++++++')
+
+      console.log(response.uri)
+      const data = new FormData()
+
+      data.append('pdf_matricula_certificate', {
+        uri: response.uri,
+        name: response.name,
+        type: response.mimeType,
+      })
+      data.append('owner', 2)
+      
+      api.put('/projects/19/update/', data)
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+      //onst fileData = await FileSystem.readAsStringAsync(FileSystem.cacheDirectory+'/b3593637-096a-4566-9909-dfb8eb9a9b8d.pdf')
 
       return response
-    } 
-    else {
+    } else {
       console.log("AAAAAAAA")
       const response = await DocumentPicker.getDocumentAsync({
         multiple: false,

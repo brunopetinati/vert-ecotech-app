@@ -3,6 +3,7 @@ import { Button, } from "@rneui/themed"
 import FileCardList from '../../components/FileCardList'
 import { useEffect, useState } from "react"
 import api from '../../Api'
+import { WebView } from 'react-native-webview';
 
 export default function ThirdScreen({route, navigation}) {
     const { projectId, project } = route.params
@@ -96,26 +97,10 @@ export default function ThirdScreen({route, navigation}) {
 
     return(
         <View style={styles.container}>
-            {/* Input Fields */}
-            <View style={styles.cardContainer}>
-                <FileCardList 
-                    certMatricula={certMatricula}
-                    carSicar={carSicar}
-                    propertyPolygon={propertyPolygon}
-                    cCIR={cCIR}
-                    regularityCertificate={regularityCertificate}
-                    setCertMatricula={setCertMatricula} 
-                    setCarSicar={setCarSicar} 
-                    setPropertyPolygon={setPropertyPolygon} 
-                    setCCIR={setCCIR} 
-                    setRegularityCertificate={setRegularityCertificate}
+                <WebView
+                    style={styles.container}
+                    source={{ uri: 'https://plataforma.vertecotech.com/open_upload' }}
                 />
-            </View>
-            {/* Button Area */}
-            <View>
-                <Button onPress={finishProject} containerStyle={{ marginVertical: 8 }} title='Finalizar' />
-                <Button onPress={saveAndContinueLater} type="outline" title='Continuar mais tarde' />
-            </View>
         </View>
     )
 }

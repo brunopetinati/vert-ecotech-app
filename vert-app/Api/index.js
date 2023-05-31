@@ -9,7 +9,7 @@ async function getToken() {
 axios.interceptors.request.use(
   async (config) => {
     config.headers.Authorization = `Bearer ${await getToken()}`
-
+    
     config.headers.AccessControlAllowOrigin = 'Access-Control-Allow-Origin *'
 
     // production

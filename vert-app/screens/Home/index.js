@@ -133,6 +133,7 @@ export default function Home({navigation}) {
         </Dialog>
     } else {
         return(
+            
             <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
                 <WelcomeHeader navigation={navigation} userName={userCredentials.full_name} />
                 

@@ -55,7 +55,7 @@
         "WRITE_EXTERNAL_STORAGE"
       ],
       "adaptiveIcon": {
-        "foregroundImage": "./assets/leaf_animation.gif",
+        "foregroundImage": "./assets/marca-vert.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.vert.vetecotech"
